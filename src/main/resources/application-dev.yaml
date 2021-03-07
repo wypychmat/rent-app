@@ -5,7 +5,7 @@ spring:
     password: ${MYSQL_DEV_PASS}
     tomcat:
       initial-size: 5
-#    initialization-mode: always
+    initialization-mode: always
 
   jpa:
     properties:
