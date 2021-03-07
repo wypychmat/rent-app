@@ -7,10 +7,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.*;
 
-@Entity(name = "user")
+@Entity()
+@NamedQuery(name = "User.existByUsername",
+        query = "SELECT (COUNT(u)> 0) FROM User u WHERE u.username=:username")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -36,6 +39,7 @@ public class User {
 
     private boolean isEnabled;
 
+    @NotEmpty
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
