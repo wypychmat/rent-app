@@ -14,35 +14,35 @@ public class RsaKeyConfig {
     private RsaKeyConfig() {
     }
 
-    public String getPrivatePath() {
+    String getPrivatePath() {
         return privatePath;
     }
 
-    public String getPublicPath() {
+    String getPublicPath() {
         return publicPath;
     }
 
-    public void setPrivatePath(String privatePath) {
+    void setPrivatePath(String privatePath) {
         this.privatePath = privatePath;
     }
 
-    public void setPublicPath(String publicPath) {
+    void setPublicPath(String publicPath) {
         this.publicPath = publicPath;
     }
 
-    public String getPrivateHeader() {
+    String getPrivateHeader() {
         return privateHeader;
     }
 
-    public void setPrivateHeader(String privateHeader) {
+    void setPrivateHeader(String privateHeader) {
         this.privateHeader = privateHeader;
     }
 
-    public String getPublicHeader() {
+    String getPublicHeader() {
         return publicHeader;
     }
 
-    public void setPublicHeader(String publicHeader) {
+    void setPublicHeader(String publicHeader) {
         this.publicHeader = publicHeader;
     }
 }
