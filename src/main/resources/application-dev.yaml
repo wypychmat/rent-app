@@ -14,7 +14,18 @@ spring:
           validation:
             mode: auto
       hibernate:
-        dialect:  org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
     hibernate:
       ddl-auto: create-drop
+rsa:
+  config:
+    private-path: keys/rsa.private
+    public-path: keys/rsa.public
+    private-header: PRIVATE
+    public-header: PUBLIC
+jwt:
+  prefix: Bearer
+  expiration-in-min: 90
+  contentType: application/json
+  authorities: authorities
