@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
 @ConfigurationProperties(prefix = "rsa.config")
-public class RsaKeyConfig {
+ class RsaKeyConfig {
 
     private String privatePath;
     private String publicPath;

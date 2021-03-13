@@ -30,7 +30,7 @@ class LoginRequest {
             if (username == null && password == null)
                 throw new IncorrectPayloadException("Missing payload");
             else
-                throw new IncorrectPayloadException((username == null) ? "Missing username" : "Missing password");
+                throw new IncorrectPayloadException((username == null) ? "Missing username field" : "Missing password field");
         }
     }
 

@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -17,13 +19,12 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Component
-public class KeyProvider {
-    private final PublicKey publicKey;
-    private final PrivateKey privateKey;
 
-    @Autowired
-    private KeyProvider(RsaKeyConfig rsaKeyConfig) {
+class KeyProvider {
+    private final RSAPublicKey publicKey;
+    private final RSAPrivateKey privateKey;
+
+    KeyProvider(RsaKeyConfig rsaKeyConfig) {
         publicKey = keyGenerator(this::generatePublic,
                 (data) -> new X509EncodedKeySpec(decode(data)),
                 rsaKeyConfig.getPublicPath(), rsaKeyConfig.getPublicHeader());
@@ -33,11 +34,11 @@ public class KeyProvider {
     }
 
 
-    public PublicKey getPublicKey() {
+    RSAPublicKey getPublicKey() {
         return publicKey;
     }
 
-    PrivateKey getPrivateKey() {
+    RSAPrivateKey getPrivateKey() {
         return privateKey;
     }
 
@@ -55,21 +56,21 @@ public class KeyProvider {
     }
 
 
-    private PublicKey generatePublic(EncodedKeySpec spec) {
+    private RSAPublicKey generatePublic(EncodedKeySpec spec) {
         try {
-            return KeyFactory.getInstance("RSA").generatePublic(spec);
+            return (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(spec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error during generate public key",e);
+            throw new RuntimeException("Error during generate public key", e);
         }
     }
 
-    private PrivateKey generatePrivate(EncodedKeySpec spec) {
+    private RSAPrivateKey generatePrivate(EncodedKeySpec spec) {
         try {
-            return KeyFactory.getInstance("RSA").generatePrivate(spec);
+            return (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(spec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error during generate private key",e);
+            throw new RuntimeException("Error during generate private key", e);
         }
     }
 

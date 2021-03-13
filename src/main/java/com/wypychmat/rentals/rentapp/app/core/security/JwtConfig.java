@@ -3,7 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "jwt")
-public class JwtConfig {
+class JwtConfig {
 
     private long expirationInMin;
     private String prefix;
