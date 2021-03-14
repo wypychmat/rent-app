@@ -1,0 +1,109 @@
+package com.wypychmat.rentals.rentapp.app.core.exception.handler;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
+@RestController
+public class DefaultErrorController extends AbstractErrorController {
+
+    private static final String PATH = "/error";
+
+    public DefaultErrorController(ErrorAttributes errorAttributes) {
+        super(errorAttributes);
+    }
+
+    @RequestMapping(value = PATH)
+    public void error(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpStatus status = getStatus(request);
+        response.addHeader("Content-Type", "application/json");
+        response.setStatus(status.value());
+
+        Map<String, Object> errorAttributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());
+        String customErrorMessage =  null;
+        if(request.getAttribute("customErrorMessage") != null) {
+            customErrorMessage = request.getAttribute("customErrorMessage").toString();
+        }
+        String path = errorAttributes.get("path").toString();
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .writeValue(response.getWriter(), new ErrorResponse(status, path,
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()),customErrorMessage));
+    }
+
+    @Override
+    public String getErrorPath() {
+        return PATH;
+    }
+
+    static class ErrorResponse {
+        private String date;
+        private int status;
+        private String error;
+        private String requestPath;
+        private String message;
+
+
+        public ErrorResponse(HttpStatus status, String requestPath, String date, String message) {
+            this.status = status.value();
+            this.error = status.getReasonPhrase();
+            this.requestPath = requestPath;
+            this.date = date;
+            this.message = message;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        public String getRequestPath() {
+            return requestPath;
+        }
+
+        public void setRequestPath(String requestPath) {
+            this.requestPath = requestPath;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+}
