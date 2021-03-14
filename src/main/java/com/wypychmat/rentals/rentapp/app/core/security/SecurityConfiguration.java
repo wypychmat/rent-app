@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -59,7 +60,10 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new RequestTokenFilter(jwtConfig,algorithm),AuthByRequestFilter.class)
                 .authorizeRequests()
-                .antMatchers("/*/api/login").permitAll()
+                .antMatchers("/*/api/login")
+                .permitAll()
+                .antMatchers(HttpMethod.POST,"/*/api/register")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
     }

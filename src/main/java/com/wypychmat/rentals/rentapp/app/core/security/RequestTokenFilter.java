@@ -63,8 +63,6 @@ class RequestTokenFilter extends OncePerRequestFilter {
                 e.printStackTrace();
                 request.setAttribute("customErrorMessage","Cannot verify token");
             }
-        } else {
-            request.setAttribute("customErrorMessage","Request should have valid Bearer header");
         }
         filterChain.doFilter(request, response);
     }
