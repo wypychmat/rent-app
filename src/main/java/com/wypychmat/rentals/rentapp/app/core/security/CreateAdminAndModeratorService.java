@@ -12,21 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
- class CreateAdminService {
+ class CreateAdminAndModeratorService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
     @Autowired
-    CreateAdminService(UserRepository userRepository, RoleRepository roleRepository) {
+    CreateAdminAndModeratorService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
     @Transactional
-    public void saveAdminIfNotExist(User user){
+    public void saveAdminOrModIfNotExist(User user,ApplicationMainRole appRole){
         if(!userRepository.existByUsername(user.getUsername())) {
-            Optional<Role> byRoleName = roleRepository.findByRoleName(ApplicationMainRole.ADMIN.name());
+            Optional<Role> byRoleName = roleRepository.findByRoleName(appRole.name());
             if(byRoleName.isPresent()) {
                 Role role = byRoleName.get();
                 user.addRoles(role);
