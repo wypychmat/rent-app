@@ -1,20 +1,39 @@
 package com.wypychmat.rentals.rentapp.app.core.controller.dto;
 
 
-import com.wypychmat.rentals.rentapp.app.core.validation.ValidEmail;
+import com.wypychmat.rentals.rentapp.app.core.validation.config.PasswordConfirmation;
+import com.wypychmat.rentals.rentapp.app.core.validation.config.ValidEmail;
+import com.wypychmat.rentals.rentapp.app.core.validation.config.ValidPassword;
+import com.wypychmat.rentals.rentapp.app.core.validation.config.ValidUsername;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@PasswordConfirmation
 public class RegistrationRequest {
 
+    // TODO: 15.03.2021 add custom messages
+
+    @ValidUsername
     private String username;
+
+    @Size(max = 60,message = "{com.wypychmat.rentals.rentapp.app.core.controller.dto.RegistrationRequest.password.Max}")
+    @ValidPassword
     private String password;
+
     private String rePassword;
+
+    @Size(min = 4, max = 70)
     @ValidEmail
     private String email;
-    private String firstName;
-    private String lastName;
 
-    public RegistrationRequest() {
-    }
+    @Size(min = 2, max = 45)
+    @NotBlank
+    private String firstName;
+
+    @Size(min = 2, max = 60)
+    @NotBlank
+    private String lastName;
 
     public RegistrationRequest(String username, String password, String rePassword, String email, String firstName, String lastName) {
         this.username = username;
@@ -23,6 +42,9 @@ public class RegistrationRequest {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public RegistrationRequest() {
     }
 
     public String getUsername() {

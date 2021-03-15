@@ -1,13 +1,14 @@
 package com.wypychmat.rentals.rentapp.app.core.exception.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class BasicErrorResponse {
     private int status;
     private String issuedAt;
-    private List<String> errors;
+    private Map<String,String> errors;
 
-    public BasicErrorResponse(int status, String issuedAt, List<String> errors) {
+    public BasicErrorResponse(int status, String issuedAt, Map<String,String>  errors) {
         this.status = status;
         this.issuedAt = issuedAt;
         this.errors = errors;
@@ -32,11 +33,11 @@ public class BasicErrorResponse {
         this.issuedAt = issuedAt;
     }
 
-    public List<String> getErrors() {
+    public Map<String, String> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<String> errors) {
+    public void setErrors(Map<String, String> errors) {
         this.errors = errors;
     }
 }
