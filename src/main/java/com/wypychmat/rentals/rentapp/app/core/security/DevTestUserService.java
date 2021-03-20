@@ -13,13 +13,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Profile("dev")
-class DevUserService implements UserService {
+@Profile({"dev", "test"})
+class DevTestUserService implements UserService {
 
     private final UserRepository userRepository;
 
     @Autowired
-    DevUserService(UserRepository userRepository) {
+    DevTestUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

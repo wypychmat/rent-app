@@ -15,17 +15,8 @@ spring:
             mode: auto
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
 
     hibernate:
       ddl-auto: update
-rsa:
-  config:
-    private-path: keys/rsa.private
-    public-path: keys/rsa.public
-    private-header: PRIVATE
-    public-header: PUBLIC
-jwt:
-  prefix: Bearer
-  expiration-in-min: 90
-  contentType: application/json
-  authorities: authorities
+    show-sql: true

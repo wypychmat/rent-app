@@ -9,10 +9,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.Validator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class ValidatorService {
@@ -42,12 +40,6 @@ public class ValidatorService {
             }
             errors.put(s, message);
         });
-        String a = "a";
         throw new InvalidRegisterRequestException("invalid request",errors);
-
-//            throw new InvalidRegisterRequestException("invalid request",validate.stream()
-//                    .map(ConstraintViolation::getMessage)
-//                    .collect(Collectors.toList())
-//            );
     }
 }

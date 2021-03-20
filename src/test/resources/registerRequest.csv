@@ -1,0 +1,8 @@
+username, password, rePassword, email, firstname, name, expectedErrors
+username, password, password, mail@gm.com, name, name, 1
+username, 123passwordD$, password, mail@gm.com, name, name, 1
+_username, password, password, mail@gm.com, name, n, 3
+username, password, password3, mail@gm.com, name, name, 2
+s, s, notTheSame, s, s, s, 6
+s, theSame, theSame, s, s, s, 5
+s, abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz, s, s, s, s, 6
