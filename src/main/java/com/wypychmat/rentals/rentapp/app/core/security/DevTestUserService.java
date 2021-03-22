@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
-import com.wypychmat.rentals.rentapp.app.core.user.Role;
-import com.wypychmat.rentals.rentapp.app.core.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

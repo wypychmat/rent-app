@@ -1,14 +1,13 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
+import com.wypychmat.rentals.rentapp.app.core.TestContainerBase;
+import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
-import com.wypychmat.rentals.rentapp.app.core.user.Role;
-import com.wypychmat.rentals.rentapp.app.core.user.User;
-import com.wypychmat.rentals.rentapp.app.core.user.constant.ApplicationMainRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
@@ -18,15 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
-class CreationAdminAndModeratorTest {
-
-    @Container
-    public static MySQLContainer DB_CONTAINER = new MySQLContainer("mysql:8.0.23");
-
-    static {
-        DB_CONTAINER.start();
-        System.setProperty("MYSQL_TEST_PORT", String.valueOf(DB_CONTAINER.getFirstMappedPort()));
-    }
+class CreationAdminAndModeratorTest extends TestContainerBase {
 
 
     @Test

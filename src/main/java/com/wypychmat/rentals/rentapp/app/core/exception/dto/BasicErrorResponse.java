@@ -1,6 +1,5 @@
 package com.wypychmat.rentals.rentapp.app.core.exception.dto;
 
-import java.util.List;
 import java.util.Map;
 
 public class BasicErrorResponse {

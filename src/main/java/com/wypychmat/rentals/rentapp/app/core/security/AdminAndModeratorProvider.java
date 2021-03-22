@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
-import com.wypychmat.rentals.rentapp.app.core.user.User;
-import com.wypychmat.rentals.rentapp.app.core.user.constant.ApplicationMainRole;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
