@@ -1,4 +1,16 @@
 spring:
+  mail:
+    password: ${DEV_EMAIL_PASS}
+    username: ${DEV_EMAIL_USER}
+    host: ${DEV_EMAIL_HOST:smtp.gmail.com}
+    port: ${DEV_EMAIL_PORT:587}
+    protocol: ${DEV_EMAIL_PROTOCOL:smtp}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   datasource:
     url: jdbc:mysql://${MYSQL_DEV_HOST:localhost}:${MYSQL_DEV_PORT:3306}/${MYSQL_DEV_DATABASE}?useSSL=false&serverTimezone=UTC
     username: ${MYSQL_DEV_USER}

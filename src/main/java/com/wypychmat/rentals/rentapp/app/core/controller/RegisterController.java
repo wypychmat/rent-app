@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Optional;
 
@@ -27,20 +28,20 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) throws IOException {
         Optional<Long> id = registrationServiceImpl.registerUser(registrationRequest);
         return id.map(item -> ResponseEntity.status(HttpStatus.CREATED)
                 .body(getRegistrationResponse(item, registrationRequest.getEmail())))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
+
     private RegistrationResponse getRegistrationResponse(Long item, String email) {
         MessageFormat formatter =
                 new MessageFormat(localMessage.getLocalizedMessage("register.wait.for.email"));
-        String message = formatter.format(new Object[] {email});
+        String message = formatter.format(new Object[]{email});
         return new RegistrationResponse(HttpStatus.CREATED,
                 item,
                 message);
     }
-
 }
