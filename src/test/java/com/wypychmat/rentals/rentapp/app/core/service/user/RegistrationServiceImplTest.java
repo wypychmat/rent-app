@@ -3,6 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBase;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -36,9 +37,9 @@ class RegistrationServiceImplTest extends TestContainerBase {
         RegistrationRequest registrationRequest = getValidRegistrationRequest(username, username);
         //when
         userRepository.deleteUserByUsername(username);
-        Optional<Long> id = registrationService.registerUser(registrationRequest);
+        Optional<User> user = registrationService.registerUser(registrationRequest);
         //then
-        assertThat(id).isPresent();
+        assertThat(user).isPresent();
     }
 
     @Test
@@ -51,7 +52,7 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(username, username);
         //when then
-        Optional<Long> firstResult = registrationService.registerUser(registrationRequest);
+        Optional<User> firstResult = registrationService.registerUser(registrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
@@ -70,7 +71,7 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(secondUsername, firstUsername);
         //when then
-        Optional<Long> firstResult = registrationService.registerUser(firstRegistrationRequest);
+        Optional<User> firstResult = registrationService.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
@@ -90,7 +91,7 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(firstUsername, secondUsername);
         //when then
-        Optional<Long> firstResult = registrationService.registerUser(firstRegistrationRequest);
+        Optional<User> firstResult = registrationService.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)

@@ -1,7 +1,18 @@
 spring:
   profiles:
     active: dev
-
+  mail:
+    password: ${EMAIL_PASS}
+    username: ${EMAIL_USER}
+    host: ${EMAIL_HOST:smtp.gmail.com}
+    port: ${EMAIL_PORT:587}
+    protocol: ${EMAIL_PROTOCOL:smtp}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 rsa:
   config:
     private-path: keys/rsa.private
@@ -13,3 +24,6 @@ jwt:
   expiration-in-min: 90
   contentType: application/json
   authorities: authorities
+
+mail.message.html.source: email/registrationEmail.html
+mail.message.html.sender: ${EMAIL_USER:rentapp@spring.com}

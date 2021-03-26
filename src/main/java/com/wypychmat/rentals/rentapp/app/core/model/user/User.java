@@ -49,6 +49,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> userRoles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<RegisterToken> registerTokens;
+
     public User() {
     }
 
@@ -141,6 +144,14 @@ public class User {
 
     public void addRoles(List<Role> permissions) {
         this.userRoles.addAll(permissions);
+    }
+
+    public void setRegisterTokens(List<RegisterToken> registerTokens) {
+        this.registerTokens = registerTokens;
+    }
+
+    public List<RegisterToken> getRegisterTokens() {
+        return registerTokens;
     }
 
     @Override
