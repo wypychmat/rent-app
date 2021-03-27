@@ -33,6 +33,8 @@ class RequestTokenFilter extends OncePerRequestFilter {
         this.algorithm = algorithm;
     }
 
+    // TODO: 27.03.2021 change messages provider to Validator
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);

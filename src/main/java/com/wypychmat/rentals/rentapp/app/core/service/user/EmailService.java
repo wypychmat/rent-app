@@ -1,10 +1,12 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -12,7 +14,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 abstract class EmailService<T> {
@@ -20,14 +21,16 @@ abstract class EmailService<T> {
     protected final JavaMailSender javaMailSender;
     private final ResourceLoader resourceLoader;
     protected final RegisterMailMessageSourceProvider registerMailMessageSourceProvider;
+    private final LoginRegisterPath loginRegisterPath;
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     protected EmailService(JavaMailSender javaMailSender,
                            ResourceLoader resourceLoader,
-                           RegisterMailMessageSourceProvider registerMailMessageSourceProvider) {
+                           RegisterMailMessageSourceProvider registerMailMessageSourceProvider, LoginRegisterPath loginRegisterPath) {
         this.javaMailSender = javaMailSender;
         this.resourceLoader = resourceLoader;
         this.registerMailMessageSourceProvider = registerMailMessageSourceProvider;
+        this.loginRegisterPath = loginRegisterPath;
     }
 
     protected Optional<String> getResourceString() {
@@ -61,6 +64,10 @@ abstract class EmailService<T> {
                 LOGGER.error("Registration email to: " + registrationMessagePayload.getEmail() + "wasn't send");
             }
         });
+    }
+
+    protected String getConfirmationPath() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + loginRegisterPath.getConfirmPath();
     }
 
     protected abstract Optional<T> getMessage(RegistrationMessagePayload registrationMessagePayload) throws MessagingException;

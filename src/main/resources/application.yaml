@@ -25,5 +25,25 @@ jwt:
   contentType: application/json
   authorities: authorities
 
-mail.message.html.source: email/registrationEmail.html
-mail.message.html.sender: ${EMAIL_USER:rentapp@spring.com}
+mail:
+  message:
+    html:
+      source: email/registrationEmail.html
+      sender: ${EMAIL_USER:rentapp@spring.com}
+
+api:
+  base: /api/
+  version:
+    prefix: v
+    newest: v1
+  path:
+    register: register/
+    confirm: confirm
+    login: login/
+  param:
+    register:
+      token: token
+
+
+
+

@@ -1,10 +1,12 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -18,8 +20,9 @@ class MimeEmailService extends EmailService<MimeMessage> {
     @Autowired
     MimeEmailService(JavaMailSender javaMailSender,
                      ResourceLoader resourceLoader,
-                     RegisterMailMessageSourceProvider registerMailMessageSourceProvider) {
-        super(javaMailSender, resourceLoader, registerMailMessageSourceProvider);
+                     RegisterMailMessageSourceProvider registerMailMessageSourceProvider,
+                     LoginRegisterPath loginRegisterPath) {
+        super(javaMailSender, resourceLoader, registerMailMessageSourceProvider, loginRegisterPath);
     }
 
     @Override
@@ -40,12 +43,12 @@ class MimeEmailService extends EmailService<MimeMessage> {
             throws MessagingException {
         Optional<String> resourceString = getResourceString();
         if (resourceString.isPresent()) {
-            String path = "www." +registrationMessagePayload.getToken() ;// TODO: 26.03.2021 add path from properties file
+            String path = getConfirmationPath() + registrationMessagePayload.getToken();
             MessageFormat formatter = new MessageFormat(resourceString.get());
             String format = formatter.format(new Object[]{
                     registrationMessagePayload.getUsername(),
                     path
-                    });
+            });
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(format, true);

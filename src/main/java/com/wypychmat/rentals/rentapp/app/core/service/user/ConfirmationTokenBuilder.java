@@ -4,9 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Random;
 
-public class ConfirmationTokenBuilder {
+class ConfirmationTokenBuilder {
 
-    public static String build(String username, String email) {
+    static String build(String username, String email) {
         String token = username +
                 System.currentTimeMillis() +
                 email +
