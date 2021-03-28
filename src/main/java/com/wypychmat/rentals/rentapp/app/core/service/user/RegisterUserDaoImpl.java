@@ -77,4 +77,9 @@ class RegisterUserDaoImpl implements RegisterUserDao {
     public void deleteUserByUsername(String username) {
         userRepository.deleteUserByUsername(username);
     }
+
+    @Override
+    public void enableUserById(Long id) {
+        userRepository.enableUserById(id);
+    }
 }

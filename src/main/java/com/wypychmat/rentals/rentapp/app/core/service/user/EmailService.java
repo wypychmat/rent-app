@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -46,16 +47,22 @@ abstract class EmailService<T> {
         return Optional.empty();
     }
 
-    protected abstract Function<T,Optional<Exception>> send();
+    protected abstract Function<T, Optional<Exception>> send();
 
+    @Async
     void sendEmail(RegistrationMessagePayload registrationMessagePayload) {
-        CompletableFuture.runAsync(() -> {
+        Runnable runnable = getSendRunnable(registrationMessagePayload, getConfirmationPath());
+        sendAsync(runnable);
+    }
+
+    private Runnable getSendRunnable(RegistrationMessagePayload registrationMessagePayload, String confirmationPath) {
+        return () -> {
             try {
-                Optional<T> message = getMessage(registrationMessagePayload);
+                Optional<T> message = getMessage(registrationMessagePayload, confirmationPath);
                 if (message.isPresent()) {
                     Optional<Exception> optionalException = send().apply(message.get());
-                    if(optionalException.isPresent())
-                        throw new MessagingException("Empty email message",optionalException.get());
+                    if (optionalException.isPresent())
+                        throw new MessagingException("Empty email message", optionalException.get());
                 } else {
                     throw new MessagingException("Empty email message");
                 }
@@ -63,13 +70,18 @@ abstract class EmailService<T> {
                 e.printStackTrace();
                 LOGGER.error("Registration email to: " + registrationMessagePayload.getEmail() + "wasn't send");
             }
-        });
+        };
     }
 
+    void sendAsync(Runnable send) {
+        CompletableFuture.runAsync(send);
+    }
+
+    // TODO: 28.03.2021 change later to frontendPath
     protected String getConfirmationPath() {
         return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + loginRegisterPath.getConfirmPath();
     }
 
-    protected abstract Optional<T> getMessage(RegistrationMessagePayload registrationMessagePayload) throws MessagingException;
+    protected abstract Optional<T> getMessage(RegistrationMessagePayload registrationMessagePayload, String confirmationPath) throws MessagingException;
 
 }

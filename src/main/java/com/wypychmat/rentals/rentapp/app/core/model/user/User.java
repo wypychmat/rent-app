@@ -12,7 +12,9 @@ import java.util.*;
         @NamedQuery(name = "User.existByUsername",
                 query = "SELECT (COUNT(u)> 0) FROM User u WHERE u.username=:username"),
         @NamedQuery(name = "User.existByUsernameOrEmail",
-                query = "SELECT u.username as username, u.email as email FROM User u WHERE u.username=:username OR u.email=:email")
+                query = "SELECT u.username as username, u.email as email FROM User u WHERE u.username=:username OR u.email=:email"),
+        @NamedQuery(name = "User.enableUserById",
+                query = "UPDATE User u SET u.isEnabled = 1 WHERE  u.id=:id")
 })
 public class User {
 
@@ -44,7 +46,7 @@ public class User {
     private boolean isEnabled;
 
     @NotEmpty
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> userRoles = new HashSet<>();

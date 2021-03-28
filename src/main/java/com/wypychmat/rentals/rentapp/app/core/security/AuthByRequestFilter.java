@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+// TODO: 27.03.2021 change messages provider to Validator
 class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -57,8 +58,6 @@ class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
                 "Invalid username or password"
         )));
     }
-
-    // TODO: 27.03.2021 change messages provider to Validator
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)

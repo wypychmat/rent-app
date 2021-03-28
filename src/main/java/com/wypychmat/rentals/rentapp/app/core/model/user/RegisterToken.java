@@ -2,6 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.model.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 public class RegisterToken {
@@ -19,6 +20,8 @@ public class RegisterToken {
     private Long epochExpiredAt;
 
     private boolean isConfirmed;
+
+    private LocalDateTime confirmedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -80,5 +83,13 @@ public class RegisterToken {
 
     public String getToken() {
         return token;
+    }
+
+    public LocalDateTime getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public void setConfirmedAt(LocalDateTime confirmedAt) {
+        this.confirmedAt = confirmedAt;
     }
 }

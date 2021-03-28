@@ -19,5 +19,7 @@ interface RegisterUserDao {
 
     void deleteUserByUsername(String username);
 
+    void enableUserById(Long id);
+
 
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 
+// TODO: 27.03.2021 add messages form properties
+
 @Service
 public class RegistrationServiceImpl extends RegistrationService<MimeMessage> {
 
@@ -35,7 +37,6 @@ public class RegistrationServiceImpl extends RegistrationService<MimeMessage> {
         if (token != null && !token.trim().equals("")) {
             attemptTokenConfirmation(token);
         } else {
-            // TODO: 27.03.2021 add messages form properties
             throw new InvalidConfirmationTokenException("Token must not be empty", HttpStatus.BAD_REQUEST);
         }
     }

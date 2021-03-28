@@ -38,11 +38,11 @@ class MimeEmailService extends EmailService<MimeMessage> {
 
 
     @Override
-    protected Optional<MimeMessage> getMessage(RegistrationMessagePayload registrationMessagePayload)
+    protected Optional<MimeMessage> getMessage(RegistrationMessagePayload registrationMessagePayload, String confirmationPath)
             throws MessagingException {
         Optional<String> resourceString = getResourceString();
         if (resourceString.isPresent()) {
-            String path = getConfirmationPath() + registrationMessagePayload.getToken();
+            String path = confirmationPath + registrationMessagePayload.getToken();
             MessageFormat formatter = new MessageFormat(resourceString.get());
             String format = formatter.format(new Object[]{
                     registrationMessagePayload.getUsername(),

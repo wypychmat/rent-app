@@ -36,8 +36,6 @@ public class RegisterController {
     @GetMapping("${api.version.newest}" + "/" + "${api.path.confirm}")
     public ResponseEntity<?> confirm(@RequestParam("${api.param.register.token}") String token) {
         registrationServiceImpl.confirmToken(token);
-        String localizedMessage = messageProvider.getLocalizedMessage("register.wait.for.email");
-        System.out.println(localizedMessage);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
