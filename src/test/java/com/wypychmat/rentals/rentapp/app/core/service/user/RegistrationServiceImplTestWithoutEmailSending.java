@@ -4,15 +4,10 @@ import com.wypychmat.rentals.rentapp.app.core.TestContainerBase;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
-import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
@@ -24,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-class RegistrationServiceImplTestWithoutEmail extends TestContainerBase {
+class RegistrationServiceImplTestWithoutEmailSending extends TestContainerBase {
     private static RegistrationService<MimeMessage> registrationServiceWithoutEmailSending;
     private static RegisterUserDao registerUserDao;
     private static AtomicInteger userSpecific;
@@ -35,7 +30,7 @@ class RegistrationServiceImplTestWithoutEmail extends TestContainerBase {
     static void setUp(@Autowired UserValidatorService userValidatorService,
                       @Autowired RegisterUserDao registerUserDao,
                       @Autowired MessageSource messageSource) {
-        RegistrationServiceImplTestWithoutEmail.registerUserDao = registerUserDao;
+        RegistrationServiceImplTestWithoutEmailSending.registerUserDao = registerUserDao;
         userSpecific = new AtomicInteger(0);
         when(emailService.send()).thenReturn(mimeMessage -> Optional.empty());
         when(emailService.getResourceString()).thenReturn(Optional.of("message"));

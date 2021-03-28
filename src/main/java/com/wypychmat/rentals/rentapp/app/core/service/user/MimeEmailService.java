@@ -2,6 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

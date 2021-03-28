@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("test")
+@Profile({"test","email"})
 class TestAdminAndModeratorProvider extends AdminAndModeratorProvider {
 
     @Autowired

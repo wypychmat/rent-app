@@ -1,18 +1,13 @@
 spring:
   profiles:
-    active: test
+    active: email
   mail:
     password: ${EMAIL_PASS}
     username: ${EMAIL_USER}
     host: ${EMAIL_HOST:smtp.gmail.com}
     port: ${EMAIL_PORT:587}
     protocol: ${EMAIL_PROTOCOL:smtp}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+
 rsa:
   config:
     private-path: keys/rsa.private
