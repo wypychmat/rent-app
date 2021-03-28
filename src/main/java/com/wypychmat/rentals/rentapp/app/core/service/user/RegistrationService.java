@@ -2,6 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.Constant;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
@@ -11,7 +12,6 @@ import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -34,7 +34,7 @@ abstract class RegistrationService<T> {
         this.messageProvider = new RegistrationMessageProvider(messageSource);
     }
 
-    public abstract Optional<User> registerUser(RegistrationRequest registrationRequest);
+    public abstract Optional<UserDto> registerUser(RegistrationRequest registrationRequest);
 
     public abstract void confirmToken(String token);
 
@@ -42,11 +42,10 @@ abstract class RegistrationService<T> {
         return userValidatorService.verifyRegistrationRequest(registrationRequest);
     }
 
-    protected Optional<User> attemptRegistration(RegistrationRequest registrationRequest) {
+    protected Optional<UserDto> attemptRegistration(RegistrationRequest registrationRequest) {
         if (checkUserNotExist(registrationRequest)) {
             Optional<User> user = registerUserDao.saveUser(createUserFromRequest(registrationRequest));
             if (user.isPresent()) {
-                System.out.println("user SAved");
                 return attemptToSaveRegistrationToken(user.get());
             }
         }
@@ -54,15 +53,14 @@ abstract class RegistrationService<T> {
     }
 
 
-    private Optional<User> attemptToSaveRegistrationToken(User user) {
+    private Optional<UserDto> attemptToSaveRegistrationToken(User user) {
         Optional<RegisterToken> registrationToken = getRegistrationToken(user);
         if (registrationToken.isPresent()) {
             RegisterToken newToken = registrationToken.get();
             Optional<RegisterToken> savedToken = registerUserDao.saveToken(newToken);
             if (savedToken.isPresent()) {
                 emailService.sendEmail(mapRegistrationToken(newToken));
-                user.setPassword("");
-                return Optional.of(user);
+                return Optional.of(new UserDto(user.getId(),user.getUsername(),user.getEmail()));
             } else {
                 registerUserDao.deleteUserByUsername(user.getUsername());
             }
@@ -131,11 +129,12 @@ abstract class RegistrationService<T> {
         Optional<UsernameEmail> existUser = registerUserDao.existByUsernameAndEmail(
                 registrationRequest.getUsername(),
                 registrationRequest.getEmail());
-        if (existUser.isEmpty()) {
-            return true;
+        if (existUser.isPresent()) {
+            throw new InvalidUserRequestException("User exist",
+                    messageProvider.getRegistrationErrors(registrationRequest, existUser.get()));
         }
-        throw new InvalidUserRequestException("User exist",
-                messageProvider.getRegistrationErrors(registrationRequest, existUser.get()));
+        return true;
+
     }
 
     protected User createUserFromRequest(RegistrationRequest registrationRequest) {

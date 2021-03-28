@@ -49,7 +49,6 @@ abstract class EmailService<T> {
 
     protected abstract Function<T, Optional<Exception>> send();
 
-    @Async
     void sendEmail(RegistrationMessagePayload registrationMessagePayload) {
         Runnable runnable = getSendRunnable(registrationMessagePayload, getConfirmationPath());
         sendAsync(runnable);

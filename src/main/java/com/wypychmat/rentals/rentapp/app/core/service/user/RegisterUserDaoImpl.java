@@ -11,6 +11,7 @@ import com.wypychmat.rentals.rentapp.app.core.repository.RoleRepository;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -39,6 +40,7 @@ class RegisterUserDaoImpl implements RegisterUserDao {
     }
 
     @Override
+    @Transactional
     public Optional<User> saveUser(User user) {
         try {
             Optional<Role> userRole = roleRepository.findByRoleName(ApplicationMainRole.USER.name());
@@ -57,6 +59,7 @@ class RegisterUserDaoImpl implements RegisterUserDao {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public Optional<RegisterToken> saveToken(RegisterToken registerToken) {
         try {

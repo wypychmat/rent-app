@@ -2,6 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.internationalization.registration
 
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
@@ -18,7 +19,7 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
         super(messageSource);
     }
 
-    public RegistrationResponse getRegistrationResponse(User user) {
+    public RegistrationResponse getRegistrationResponse(UserDto user) {
         MessageFormat formatter =
                 new MessageFormat(getLocalizedMessage("register.wait.for.email"));
         String message = formatter.format(new Object[]{user.getEmail()});

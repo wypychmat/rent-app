@@ -1,6 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class RegistrationServiceImpl extends RegistrationService<MimeMessage> {
     }
 
     @Override
-    public Optional<User> registerUser(RegistrationRequest registrationRequest) {
+    public Optional<UserDto> registerUser(RegistrationRequest registrationRequest) {
         if (isRequestValid(registrationRequest)) {
             return attemptRegistration(registrationRequest);
         }

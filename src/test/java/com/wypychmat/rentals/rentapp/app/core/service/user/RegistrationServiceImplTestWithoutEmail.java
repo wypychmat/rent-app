@@ -2,48 +2,63 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBase;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
-import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-class RegistrationServiceImplTest extends TestContainerBase {
-    private static RegistrationService registrationService;
-    private static UserRepository userRepository;
+
+class RegistrationServiceImplTestWithoutEmail extends TestContainerBase {
+    private static RegistrationService<MimeMessage> registrationServiceWithoutEmailSending;
+    private static RegisterUserDao registerUserDao;
     private static AtomicInteger userSpecific;
 
+    private static final MimeEmailService emailService = mock(MimeEmailService.class);
+
     @BeforeAll
-    static void setUp(@Autowired RegistrationService registrationService, @Autowired UserRepository userRepository) {
-        RegistrationServiceImplTest.registrationService = registrationService;
-        RegistrationServiceImplTest.userRepository = userRepository;
+    static void setUp(@Autowired UserValidatorService userValidatorService,
+                      @Autowired RegisterUserDao registerUserDao,
+                      @Autowired MessageSource messageSource) {
+        RegistrationServiceImplTestWithoutEmail.registerUserDao = registerUserDao;
         userSpecific = new AtomicInteger(0);
+        when(emailService.send()).thenReturn(mimeMessage -> Optional.empty());
+        when(emailService.getResourceString()).thenReturn(Optional.of("message"));
+        registrationServiceWithoutEmailSending = new RegistrationServiceImpl(userValidatorService,
+                registerUserDao,
+                emailService,
+                messageSource);
     }
 
 
     @Test
-    @Transactional
     void shouldRegisterUserWhenNew() {
         //given
         String username = "username" + userSpecific.incrementAndGet();
         RegistrationRequest registrationRequest = getValidRegistrationRequest(username, username);
         //when
-        userRepository.deleteUserByUsername(username);
-        Optional<User> user = registrationService.registerUser(registrationRequest);
+        registerUserDao.deleteUserByUsername(username);
+        Optional<UserDto> user = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
         //then
         assertThat(user).isPresent();
     }
 
     @Test
-    @Transactional
     void shouldNotRegisterUserWhenUsernameAndEmailExist() {
         //given
         String username = "username" + userSpecific.incrementAndGet();
@@ -52,15 +67,15 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(username, username);
         //when then
-        Optional<User> firstResult = registrationService.registerUser(registrationRequest);
+//        when(mockService.send()).
+        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
-                .isThrownBy(() -> registrationService.registerUser(secondRegistrationRequest));
+                .isThrownBy(() -> registrationServiceWithoutEmailSending.registerUser(secondRegistrationRequest));
     }
 
     @Test
-    @Transactional
     void shouldNotRegisterUserWhenEmailExist() {
         //given
         int firstId = userSpecific.incrementAndGet();
@@ -71,16 +86,15 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(secondUsername, firstUsername);
         //when then
-        Optional<User> firstResult = registrationService.registerUser(firstRegistrationRequest);
+        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
-                .isThrownBy(() -> registrationService.registerUser(secondRegistrationRequest));
+                .isThrownBy(() -> registrationServiceWithoutEmailSending.registerUser(secondRegistrationRequest));
     }
 
 
     @Test
-    @Transactional
     void shouldNotRegisterUserWhenUsernameExist() {
         //given
         int firstId = userSpecific.incrementAndGet();
@@ -91,15 +105,14 @@ class RegistrationServiceImplTest extends TestContainerBase {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(firstUsername, secondUsername);
         //when then
-        Optional<User> firstResult = registrationService.registerUser(firstRegistrationRequest);
+        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
-                .isThrownBy(() -> registrationService.registerUser(secondRegistrationRequest));
+                .isThrownBy(() -> registrationServiceWithoutEmailSending.registerUser(secondRegistrationRequest));
     }
 
     @Test
-    @Transactional
     void shouldNotRegisterUserWhenInvalidRequest() {
         //given
         String username = "username" + userSpecific.incrementAndGet();
@@ -108,7 +121,7 @@ class RegistrationServiceImplTest extends TestContainerBase {
         //when then
 
         assertThatExceptionOfType(InvalidUserRequestException.class)
-                .isThrownBy(() -> registrationService.registerUser(registrationRequest));
+                .isThrownBy(() -> registrationServiceWithoutEmailSending.registerUser(registrationRequest));
     }
 
     private RegistrationRequest getValidRegistrationRequest(String username, String email) {
@@ -120,6 +133,7 @@ class RegistrationServiceImplTest extends TestContainerBase {
                 "firstname",
                 "lastname");
     }
+
     private RegistrationRequest getInvalidRegistrationRequest(String username, String email) {
         return new
                 RegistrationRequest(username,
@@ -129,6 +143,4 @@ class RegistrationServiceImplTest extends TestContainerBase {
                 "a",
                 "a");
     }
-
-
 }
