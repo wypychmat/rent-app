@@ -68,4 +68,13 @@ class RegisterUserDaoImpl implements RegisterUserDao {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<RegisterToken> findToken(String token) {
+        return registerTokenRepository.findByToken(token);
+    }
+
+    @Override
+    public void deleteUserByUsername(String username) {
+        userRepository.deleteUserByUsername(username);
+    }
 }

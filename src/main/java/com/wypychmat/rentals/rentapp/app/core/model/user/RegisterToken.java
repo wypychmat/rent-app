@@ -1,6 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.model.user;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class RegisterToken {
@@ -9,6 +10,8 @@ public class RegisterToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(unique = true)
     private String token;
 
     private Long epochCreatedAt;

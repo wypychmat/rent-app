@@ -5,10 +5,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
 
-public class LocalMessage {
+
+public abstract class MessageProviderCenter {
     private final MessageSource messageSource;
 
-    public LocalMessage(MessageSource messageSource) {
+    public MessageProviderCenter(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
@@ -16,7 +17,7 @@ public class LocalMessage {
         return messageSource.getMessage(messageKey, null, getLocale());
     }
 
-    private Locale getLocale() {
+    protected Locale getLocale() {
         return LocaleContextHolder.getLocale();
     }
 }

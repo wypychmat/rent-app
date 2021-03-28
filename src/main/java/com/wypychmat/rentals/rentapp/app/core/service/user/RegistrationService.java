@@ -3,32 +3,34 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 import com.wypychmat.rentals.rentapp.app.core.Constant;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
-import com.wypychmat.rentals.rentapp.app.core.internationalization.LocalMessage;
+import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
 import com.wypychmat.rentals.rentapp.app.core.model.builder.AppUserBuilder;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import org.springframework.context.MessageSource;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 abstract class RegistrationService<T> {
     protected final UserValidatorService userValidatorService;
     protected final RegisterUserDao registerUserDao;
-    protected final LocalMessage localMessage;
     protected final EmailService<T> emailService;
+    protected final RegistrationMessageProvider messageProvider;
 
     protected RegistrationService(UserValidatorService userValidatorService,
-                                  RegisterUserDao registerUserDao, LocalMessage localMessage, EmailService<T> emailService) {
+                                  RegisterUserDao registerUserDao, EmailService<T> emailService,
+                                  MessageSource messageSource) {
         this.userValidatorService = userValidatorService;
         this.registerUserDao = registerUserDao;
-        this.localMessage = localMessage;
         this.emailService = emailService;
+        this.messageProvider = new RegistrationMessageProvider(messageSource);
     }
 
     public abstract Optional<User> registerUser(RegistrationRequest registrationRequest);
+
+    public abstract void confirmToken(String token);
 
     protected boolean isRequestValid(RegistrationRequest registrationRequest) {
         return userValidatorService.verifyRegistrationRequest(registrationRequest);
@@ -36,19 +38,34 @@ abstract class RegistrationService<T> {
 
     protected Optional<User> attemptRegistration(RegistrationRequest registrationRequest) {
         if (checkUserNotExist(registrationRequest)) {
-            Optional<User> optionalUser = registerUserDao.saveUser(createUserFromRequest(registrationRequest));
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-                RegisterToken newToken = getRegistrationToken(user);
-                Optional<RegisterToken> savedToken = registerUserDao.saveToken(newToken);
-                if (savedToken.isPresent()) {
-                    emailService.sendEmail(mapRegistrationToken(newToken));
-                    user.setPassword("");
-                    return optionalUser;
-                }
+            Optional<User> user = registerUserDao.saveUser(createUserFromRequest(registrationRequest));
+            if (user.isPresent()) {
+                return attemptToSaveRegistrationToken(user.get());
             }
         }
         return Optional.empty();
+    }
+
+    private Optional<User> attemptToSaveRegistrationToken(User user) {
+        Optional<RegisterToken> registrationToken = getRegistrationToken(user);
+        if (registrationToken.isPresent()) {
+            RegisterToken newToken = registrationToken.get();
+            Optional<RegisterToken> savedToken = registerUserDao.saveToken(newToken);
+            if (savedToken.isPresent()) {
+                emailService.sendEmail(mapRegistrationToken(newToken));
+                user.setPassword("");
+                return Optional.of(user);
+            } else {
+                registerUserDao.deleteUserByUsername(user.getUsername());
+            }
+        } else {
+            registerUserDao.deleteUserByUsername(user.getUsername());
+        }
+        return Optional.empty();
+    }
+
+    protected void attemptTokenConfirmation(String token) {
+
     }
 
     private RegistrationMessagePayload mapRegistrationToken(RegisterToken token) {
@@ -56,11 +73,20 @@ abstract class RegistrationService<T> {
         return new RegistrationMessagePayload(user.getUsername(), user.getEmail(), token.getToken());
     }
 
-    private RegisterToken getRegistrationToken(User user) {
-        String token = ConfirmationTokenBuilder.build(user.getUsername(), user.getEmail());
-        long now = System.currentTimeMillis();
-        long expired = now + Constant.HOUR_24;
-        return new RegisterToken(token, now, expired, user);
+    private Optional<RegisterToken> getRegistrationToken(User user) {
+        AtomicInteger maxTries = new AtomicInteger(5);
+        do {
+            String newToken = ConfirmationTokenBuilder.build(user.getUsername(), user.getEmail());
+            Optional<RegisterToken> tokenInDb = registerUserDao.findToken(newToken);
+            if (tokenInDb.isPresent()) {
+                long now = System.currentTimeMillis();
+                long expired = now + Constant.HOUR_24;
+                return Optional.of(new RegisterToken(newToken, now, expired, user));
+            } else {
+                maxTries.decrementAndGet();
+            }
+        } while (maxTries.get() >= 0);
+        return Optional.empty();
     }
 
     protected boolean checkUserNotExist(RegistrationRequest registrationRequest) {
@@ -70,7 +96,8 @@ abstract class RegistrationService<T> {
         if (existUser.isEmpty()) {
             return true;
         }
-        throw new InvalidUserRequestException("User exist", getRegistrationErrors(registrationRequest, existUser.get()));
+        throw new InvalidUserRequestException("User exist",
+                messageProvider.getRegistrationErrors(registrationRequest, existUser.get()));
     }
 
     protected User createUserFromRequest(RegistrationRequest registrationRequest) {
@@ -81,26 +108,5 @@ abstract class RegistrationService<T> {
                 .setFirstName(registrationRequest.getFirstName())
                 .setLastName(registrationRequest.getLastName())
                 .build();
-    }
-
-    private Map<String, String> getRegistrationErrors(RegistrationRequest registrationRequest, UsernameEmail user) {
-        String withGiven = localMessage.getLocalizedMessage("error.user.with.given");
-        String alreadyExist = localMessage.getLocalizedMessage("error.already.exist");
-        HashMap<String, String> errors = new HashMap<>();
-        if (user.getUsername().equals(registrationRequest.getUsername())) {
-            String format = getRegistrationErrorMessage(withGiven, alreadyExist, "error.username.exist");
-            errors.put("username", format);
-        }
-        if (user.getEmail().equals(registrationRequest.getEmail())) {
-            String format = getRegistrationErrorMessage(withGiven, alreadyExist, "error.email.exist");
-            errors.put("email", format);
-        }
-        return errors;
-    }
-
-    private String getRegistrationErrorMessage(String withGiven, String alreadyExist, String messageKey) {
-        String baseMessage = localMessage.getLocalizedMessage(messageKey);
-        MessageFormat formatter = new MessageFormat(baseMessage);
-        return formatter.format(new Object[]{withGiven, alreadyExist});
     }
 }

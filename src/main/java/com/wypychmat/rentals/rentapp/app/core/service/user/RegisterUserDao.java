@@ -15,5 +15,9 @@ interface RegisterUserDao {
 
     Optional<RegisterToken> saveToken(RegisterToken registerToken);
 
+    Optional<RegisterToken> findToken(String token);
+
+    void deleteUserByUsername(String username);
+
 
 }

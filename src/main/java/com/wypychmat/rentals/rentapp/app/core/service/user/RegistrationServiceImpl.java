@@ -1,9 +1,11 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.internationalization.LocalMessage;
+import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
@@ -15,9 +17,9 @@ public class RegistrationServiceImpl extends RegistrationService<MimeMessage> {
     @Autowired
     public RegistrationServiceImpl(UserValidatorService userValidatorService,
                                    RegisterUserDao registerUserDao,
-                                   LocalMessage localMessage,
-                                   EmailService<MimeMessage> emailService) {
-        super(userValidatorService, registerUserDao, localMessage, emailService);
+                                   EmailService<MimeMessage> emailService,
+                                   MessageSource messageSource) {
+        super(userValidatorService, registerUserDao, emailService, messageSource);
     }
 
     @Override
@@ -28,4 +30,13 @@ public class RegistrationServiceImpl extends RegistrationService<MimeMessage> {
         return Optional.empty();
     }
 
+    @Override
+    public void confirmToken(String token) {
+        if (token != null && !token.trim().equals("")) {
+            attemptTokenConfirmation(token);
+        } else {
+            // TODO: 27.03.2021 add messages form properties
+            throw new InvalidConfirmationTokenException("Token must not be empty", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
