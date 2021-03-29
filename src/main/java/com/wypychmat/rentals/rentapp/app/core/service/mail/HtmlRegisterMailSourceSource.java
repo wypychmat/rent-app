@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user;
+package com.wypychmat.rentals.rentapp.app.core.service.mail;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

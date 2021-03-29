@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: email
+    active: test
   mail:
     password: ${EMAIL_PASS}
     username: ${EMAIL_USER}
@@ -24,6 +24,9 @@ mail:
   message:
     html:
       source: email/registrationEmail.html
+      sender: ${EMAIL_USER:rentapp@spring.com}
+    text:
+      source: email/registration.txt
       sender: ${EMAIL_USER:rentapp@spring.com}
 
 api:

@@ -1,40 +1,40 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.TestContainerBase;
+import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.service.mail.SimpleEmailMessageService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
-import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
-class RegistrationServiceImplTestWithoutEmailSending extends TestContainerBase {
-    private static RegistrationService<MimeMessage> registrationServiceWithoutEmailSending;
+class RegistrationServiceTest extends TestContainerBaseWithEmail {
+    public static final String EMAIL_COM = "@email.com";
+    private static RegistrationService registrationServiceWithoutEmailSending;
     private static RegisterUserDao registerUserDao;
     private static AtomicInteger userSpecific;
 
-    private static final MimeEmailService emailService = mock(MimeEmailService.class);
+    private static final SimpleEmailMessageService emailService = mock(SimpleEmailMessageService.class);
 
+
+    // TODO: 29.03.2021
     @BeforeAll
     static void setUp(@Autowired UserValidatorService userValidatorService,
                       @Autowired RegisterUserDao registerUserDao,
                       @Autowired MessageSource messageSource) {
-        RegistrationServiceImplTestWithoutEmailSending.registerUserDao = registerUserDao;
+        RegistrationServiceTest.registerUserDao = registerUserDao;
         userSpecific = new AtomicInteger(0);
-        when(emailService.send()).thenReturn(mimeMessage -> Optional.empty());
-        when(emailService.getResourceString()).thenReturn(Optional.of("message"));
-        registrationServiceWithoutEmailSending = new RegistrationServiceImpl(userValidatorService,
+        registrationServiceWithoutEmailSending = new RegistrationServiceTestImplementation(userValidatorService,
                 registerUserDao,
                 emailService,
                 messageSource);
@@ -51,6 +51,9 @@ class RegistrationServiceImplTestWithoutEmailSending extends TestContainerBase {
         Optional<UserDto> user = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
         //then
         assertThat(user).isPresent();
+
+        verify(emailService, times(1))
+                .sendEmail(new RegistrationMessagePayload(username, username + EMAIL_COM, any()));
     }
 
     @Test
@@ -61,8 +64,7 @@ class RegistrationServiceImplTestWithoutEmailSending extends TestContainerBase {
                 username);
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(username, username);
-        //when then
-//        when(mockService.send()).
+
         Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
 
         assertThat(firstResult).isPresent();
@@ -124,7 +126,7 @@ class RegistrationServiceImplTestWithoutEmailSending extends TestContainerBase {
                 RegistrationRequest(username,
                 "password1@D",
                 "password1@D",
-                email + "@email.com",
+                email + EMAIL_COM,
                 "firstname",
                 "lastname");
     }

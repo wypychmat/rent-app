@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-class RegistrationMessagePayload {
+public class RegistrationMessagePayload {
     private final String username;
     private final String email;
     private final String token;
@@ -11,15 +11,15 @@ class RegistrationMessagePayload {
         this.token = token;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    String getToken() {
+    public String getToken() {
         return token;
     }
 }

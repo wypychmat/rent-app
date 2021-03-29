@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Profile({"dev", "test", "email"})
+@Profile({"dev", "test"})
 class DevTestUserService implements UserService {
 
     private final UserRepository userRepository;

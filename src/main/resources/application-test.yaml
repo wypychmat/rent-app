@@ -6,12 +6,13 @@ spring:
     password: test
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+    password: test
+    username: test
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
+    test-connection: true
+
   jpa:
     properties:
       hibernate:

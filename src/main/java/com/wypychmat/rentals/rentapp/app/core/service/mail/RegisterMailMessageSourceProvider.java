@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user;
+package com.wypychmat.rentals.rentapp.app.core.service.mail;
 
 abstract class RegisterMailMessageSourceProvider {
     private final String messageSource;

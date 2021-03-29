@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user;
+package com.wypychmat.rentals.rentapp.app.core.service.mail;
 
 
 import java.lang.annotation.ElementType;
@@ -18,10 +18,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 @interface MailMessageSource {
-    MessageType type() default MessageType.DEFAULT_HTML;
+    Type type() default Type.DEFAULT_HTML;
 
-    enum MessageType {
-        DEFAULT_HTML, OTHER_HTML;
+    enum Type {
+        DEFAULT_HTML, OTHER_HTML,TEXT;
     }
 
 }

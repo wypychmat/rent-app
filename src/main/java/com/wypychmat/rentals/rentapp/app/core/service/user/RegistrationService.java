@@ -10,6 +10,7 @@ import com.wypychmat.rentals.rentapp.app.core.model.builder.AppUserBuilder;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
@@ -19,14 +20,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 // TODO: 28.03.2021 add message from properties
-abstract class RegistrationService<T> {
+public abstract class RegistrationService {
     protected final UserValidatorService userValidatorService;
     protected final RegisterUserDao registerUserDao;
-    protected final EmailService<T> emailService;
+    protected final EmailService emailService;
     protected final RegistrationMessageProvider messageProvider;
 
     protected RegistrationService(UserValidatorService userValidatorService,
-                                  RegisterUserDao registerUserDao, EmailService<T> emailService,
+                                  RegisterUserDao registerUserDao, EmailService emailService,
                                   MessageSource messageSource) {
         this.userValidatorService = userValidatorService;
         this.registerUserDao = registerUserDao;
