@@ -1,3 +1,47 @@
 spring:
   profiles:
-    active: dev
+    active: test
+  mail:
+    password: ${EMAIL_PASS}
+    username: ${EMAIL_USER}
+    host: ${EMAIL_HOST:smtp.gmail.com}
+    port: ${EMAIL_PORT:587}
+    protocol: ${EMAIL_PROTOCOL:smtp}
+
+rsa:
+  config:
+    private-path: keys/rsa.private
+    public-path: keys/rsa.public
+    private-header: PRIVATE
+    public-header: PUBLIC
+jwt:
+  prefix: Bearer
+  expiration-in-min: 90
+  contentType: application/json
+  authorities: authorities
+
+mail:
+  message:
+    html:
+      source: email/registrationEmail.html
+      sender: ${EMAIL_USER:rentapp@spring.com}
+    text:
+      source: email/registration.txt
+      sender: ${EMAIL_USER:rentapp@spring.com}
+
+api:
+  base: /api/
+  version:
+    prefix: v
+    newest: v1
+  path:
+    register: register/
+    confirm: confirm
+    login: login/
+  param:
+    register:
+      token: token
+
+
+
+

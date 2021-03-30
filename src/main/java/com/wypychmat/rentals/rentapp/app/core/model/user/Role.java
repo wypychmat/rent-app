@@ -1,6 +1,6 @@
-package com.wypychmat.rentals.rentapp.app.core.user;
+package com.wypychmat.rentals.rentapp.app.core.model.user;
 
-import com.wypychmat.rentals.rentapp.app.core.user.constant.ApplicationMainRole;
+import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,7 +17,7 @@ public class Role {
     private String roleName;
 
     @NotBlank
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"),
     inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permission> rolePermissions = new HashSet<>();

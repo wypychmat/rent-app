@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.user;
+package com.wypychmat.rentals.rentapp.app.core.model.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -8,8 +8,14 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity()
-@NamedQuery(name = "User.existByUsername",
-        query = "SELECT (COUNT(u)> 0) FROM User u WHERE u.username=:username")
+@NamedQueries({
+        @NamedQuery(name = "User.existByUsername",
+                query = "SELECT (COUNT(u)> 0) FROM User u WHERE u.username=:username"),
+        @NamedQuery(name = "User.existByUsernameOrEmail",
+                query = "SELECT u.username as username, u.email as email FROM User u WHERE u.username=:username OR u.email=:email"),
+        @NamedQuery(name = "User.enableUserById",
+                query = "UPDATE User u SET u.isEnabled = 1 WHERE  u.id=:id")
+})
 public class User {
 
     @Id
@@ -40,10 +46,13 @@ public class User {
     private boolean isEnabled;
 
     @NotEmpty
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> userRoles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<RegisterToken> registerTokens;
 
     public User() {
     }
@@ -56,6 +65,15 @@ public class User {
         this.lastName = lastName;
         this.isEnabled = isEnabled;
         this.userRoles = userRoles;
+    }
+
+    public User(String username, String password, String email, String firstName, String lastName, boolean isEnabled) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isEnabled = isEnabled;
     }
 
     public Long getId() {
@@ -122,12 +140,20 @@ public class User {
         this.userRoles = userRoles;
     }
 
-    public void addRoles(Role ... permissions) {
+    public void addRoles(Role... permissions) {
         this.userRoles.addAll(Arrays.asList(permissions));
     }
 
     public void addRoles(List<Role> permissions) {
         this.userRoles.addAll(permissions);
+    }
+
+    public void setRegisterTokens(List<RegisterToken> registerTokens) {
+        this.registerTokens = registerTokens;
+    }
+
+    public List<RegisterToken> getRegisterTokens() {
+        return registerTokens;
     }
 
     @Override

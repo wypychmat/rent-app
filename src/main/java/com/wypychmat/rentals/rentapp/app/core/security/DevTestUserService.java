@@ -1,29 +1,31 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
-import com.wypychmat.rentals.rentapp.app.core.user.Role;
-import com.wypychmat.rentals.rentapp.app.core.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Profile("dev")
-class DevUserService implements UserService {
+@Profile({"dev", "test"})
+class DevTestUserService implements UserService {
 
     private final UserRepository userRepository;
 
     @Autowired
-    DevUserService(UserRepository userRepository) {
+    DevTestUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
+    @Transactional
     public Optional<UserDetailsModel> getUserByUsername(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {

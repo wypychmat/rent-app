@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// TODO: 27.03.2021 change messages provider to Validator
 class RequestTokenFilter extends OncePerRequestFilter {
     private final JwtConfig jwtConfig;
     private final Algorithm algorithm;
@@ -63,8 +64,6 @@ class RequestTokenFilter extends OncePerRequestFilter {
                 e.printStackTrace();
                 request.setAttribute("customErrorMessage","Cannot verify token");
             }
-        } else {
-            request.setAttribute("customErrorMessage","Request should have valid Bearer header");
         }
         filterChain.doFilter(request, response);
     }

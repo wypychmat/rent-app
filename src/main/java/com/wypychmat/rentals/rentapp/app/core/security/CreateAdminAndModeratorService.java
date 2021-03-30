@@ -2,9 +2,9 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.wypychmat.rentals.rentapp.app.core.repository.RoleRepository;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
-import com.wypychmat.rentals.rentapp.app.core.user.Role;
-import com.wypychmat.rentals.rentapp.app.core.user.User;
-import com.wypychmat.rentals.rentapp.app.core.user.constant.ApplicationMainRole;
+import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
+import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,6 @@
-package com.wypychmat.rentals.rentapp.app.core.user;
+package com.wypychmat.rentals.rentapp.app.core.model.user;
 
-import com.wypychmat.rentals.rentapp.app.core.user.constant.ApplicationPermission;
+import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationPermission;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

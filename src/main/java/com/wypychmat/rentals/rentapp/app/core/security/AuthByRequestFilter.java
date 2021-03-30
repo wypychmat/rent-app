@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+// TODO: 27.03.2021 change messages provider to Validator
 class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -26,12 +27,13 @@ class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtConfig jwtConfig;
     private final ZoneId zoneId;
 
-    AuthByRequestFilter(AuthenticationManager authenticationManager,Algorithm algorithm, JwtConfig jwtConfig) {
+    AuthByRequestFilter(AuthenticationManager authenticationManager,Algorithm algorithm, JwtConfig jwtConfig,
+                        String loginPath) {
         this.jwtConfig = jwtConfig;
         objectMapper = new ObjectMapper();
         this.authenticationManager = authenticationManager;
         zoneId = ZoneId.systemDefault();
-        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/v1/api/login", "POST"));
+        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(loginPath, "POST"));
         setAuthenticationSuccessHandler((rq, rs, a) -> {
             LocalDateTime localDateTime = LocalDateTime.now();
             Date nowDate = Date.from(localDateTime.atZone(zoneId).toInstant());

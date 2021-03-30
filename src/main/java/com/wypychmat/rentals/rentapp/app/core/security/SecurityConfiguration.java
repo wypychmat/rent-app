@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -28,6 +29,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtConfig jwtConfig;
     private final Algorithm algorithm;
+    private final LoginRegisterPath loginRegisterPath;
 
 
     @Autowired
@@ -35,12 +37,13 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                           @UserDetailsServiceSelector UserDetailsService userDetailsService,
                           @AuthEntryPoint AuthenticationEntryPoint authenticationEntryPoint,
                           RsaKeyConfig rsaKeyConfig,
-                          JwtConfig jwtConfig) {
+                          JwtConfig jwtConfig, LoginRegisterPath loginRegisterPath) {
 
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtConfig = jwtConfig;
+        this.loginRegisterPath = loginRegisterPath;
         KeyProvider keyProvider = new KeyProvider(rsaKeyConfig);
         this.algorithm = Algorithm.RSA256(keyProvider.getPublicKey(), keyProvider.getPrivateKey());
     }
@@ -55,11 +58,15 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new AuthByRequestFilter(authenticationManager(), algorithm, jwtConfig),
+                .addFilterBefore(new AuthByRequestFilter(authenticationManager(), algorithm, jwtConfig,
+                                loginRegisterPath.getMatcherLoginPath()),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new RequestTokenFilter(jwtConfig,algorithm),AuthByRequestFilter.class)
+                .addFilterAfter(new RequestTokenFilter(jwtConfig, algorithm), AuthByRequestFilter.class)
                 .authorizeRequests()
-                .antMatchers("/*/api/login").permitAll()
+                .antMatchers(HttpMethod.POST, loginRegisterPath.getMatcherRegisterPath())
+                .permitAll()
+                .regexMatchers(HttpMethod.GET,loginRegisterPath.getRegexForConfirmPath())
+                .permitAll()
                 .anyRequest()
                 .authenticated();
     }
@@ -78,5 +85,6 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
+
 
 }
