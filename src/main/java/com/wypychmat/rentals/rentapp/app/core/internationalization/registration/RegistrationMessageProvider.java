@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.internationalization.registration;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;

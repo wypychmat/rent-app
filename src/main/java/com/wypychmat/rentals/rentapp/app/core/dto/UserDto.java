@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.controller.dto.response;
+package com.wypychmat.rentals.rentapp.app.core.dto;
 
 public class UserDto {
     private Long id;

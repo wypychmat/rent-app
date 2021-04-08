@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user.validation;
+package com.wypychmat.rentals.rentapp.app.core.validation.user;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = EmailValidator.class)
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface ValidEmail {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidEmail.message}";
+public @interface EmailConstraint {
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidEmail.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "email";

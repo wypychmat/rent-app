@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.exception.dto;
+package com.wypychmat.rentals.rentapp.app.core.dto.exception;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;

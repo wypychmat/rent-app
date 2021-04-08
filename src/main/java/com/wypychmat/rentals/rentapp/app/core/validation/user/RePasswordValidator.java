@@ -1,12 +1,12 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user.validation;
+package com.wypychmat.rentals.rentapp.app.core.validation.user;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class RePasswordValidator implements ConstraintValidator<PasswordConfirmation, RegistrationRequest> {
-    public void initialize(PasswordConfirmation constraintAnnotation) {
+public class RePasswordValidator implements ConstraintValidator<RePasswordConstraint, RegistrationRequest> {
+    public void initialize(RePasswordConstraint constraintAnnotation) {
     }
 
     @Override

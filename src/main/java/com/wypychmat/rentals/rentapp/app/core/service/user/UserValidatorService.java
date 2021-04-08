@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 
 interface UserValidatorService {
 

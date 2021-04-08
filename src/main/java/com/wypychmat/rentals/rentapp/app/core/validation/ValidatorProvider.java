@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user;
+package com.wypychmat.rentals.rentapp.app.core.validation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,10 +8,10 @@ import javax.validation.Validator;
 
 
 @Configuration
-class ValidatorConfiguration {
+public class ValidatorProvider {
 
     @Bean
-    Validator validator() {
+    public Validator validator() {
         return new LocalValidatorFactoryBean();
     }
 }

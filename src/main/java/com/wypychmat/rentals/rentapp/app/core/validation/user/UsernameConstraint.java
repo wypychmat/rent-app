@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user.validation;
+package com.wypychmat.rentals.rentapp.app.core.validation.user;
 
 
 import javax.validation.Constraint;
@@ -14,8 +14,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = UsernameValidator.class)
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface ValidUsername {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidUsername.message}";
+public @interface UsernameConstraint {
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidUsername.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "username";

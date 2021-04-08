@@ -5,7 +5,7 @@ import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
 import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
-import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
+import com.wypychmat.rentals.rentapp.app.core.model.user.ApplicationMainRole;
 import com.wypychmat.rentals.rentapp.app.core.repository.RegisterTokenRepository;
 import com.wypychmat.rentals.rentapp.app.core.repository.RoleRepository;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;

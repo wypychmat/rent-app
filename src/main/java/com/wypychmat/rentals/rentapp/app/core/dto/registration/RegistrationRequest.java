@@ -1,30 +1,30 @@
-package com.wypychmat.rentals.rentapp.app.core.controller.dto.request;
+package com.wypychmat.rentals.rentapp.app.core.dto.registration;
 
 
-import com.wypychmat.rentals.rentapp.app.core.service.user.validation.PasswordConfirmation;
-import com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidEmail;
-import com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidPassword;
-import com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidUsername;
+import com.wypychmat.rentals.rentapp.app.core.validation.user.RePasswordConstraint;
+import com.wypychmat.rentals.rentapp.app.core.validation.user.EmailConstraint;
+import com.wypychmat.rentals.rentapp.app.core.validation.user.PasswordConstraint;
+import com.wypychmat.rentals.rentapp.app.core.validation.user.UsernameConstraint;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@PasswordConfirmation
+@RePasswordConstraint
 public class RegistrationRequest {
 
     // TODO: 15.03.2021 add custom messages
 
-    @ValidUsername
+    @UsernameConstraint
     private String username;
 
-    @Size(max = 60,message = "{com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest.password.Max}")
-    @ValidPassword
+    @Size(max = 60,message = "{com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest.password.Max}")
+    @PasswordConstraint
     private String password;
 
     private String rePassword;
 
     @Size(min = 4, max = 70)
-    @ValidEmail
+    @EmailConstraint
     private String email;
 
     @Size(min = 2, max = 45)

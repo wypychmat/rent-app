@@ -2,7 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.exception.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
-import com.wypychmat.rentals.rentapp.app.core.exception.dto.BasicErrorResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.exception.BasicErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

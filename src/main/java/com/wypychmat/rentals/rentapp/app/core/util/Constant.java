@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core;
+package com.wypychmat.rentals.rentapp.app.core.util;
 
 public class Constant {
     public static final int HOUR_24 = 86400000;

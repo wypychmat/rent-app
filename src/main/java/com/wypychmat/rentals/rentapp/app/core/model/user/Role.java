@@ -1,7 +1,5 @@
 package com.wypychmat.rentals.rentapp.app.core.model.user;
 
-import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.*;

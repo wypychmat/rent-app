@@ -3,7 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
-import com.wypychmat.rentals.rentapp.app.core.model.user.constant.ApplicationMainRole;
+import com.wypychmat.rentals.rentapp.app.core.model.user.ApplicationMainRole;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

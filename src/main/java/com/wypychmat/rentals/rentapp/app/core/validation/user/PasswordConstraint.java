@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.service.user.validation;
+package com.wypychmat.rentals.rentapp.app.core.validation.user;
 
 
 import javax.validation.Constraint;
@@ -14,8 +14,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = PasswordValidator.class)
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface ValidPassword {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.service.user.validation.ValidPassword.message}";
+public @interface PasswordConstraint {
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidPassword.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "password";

@@ -1,19 +1,14 @@
 package com.wypychmat.rentals.rentapp.app.core.exception.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
-import com.wypychmat.rentals.rentapp.app.core.exception.dto.BasicErrorResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.exception.BasicErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 

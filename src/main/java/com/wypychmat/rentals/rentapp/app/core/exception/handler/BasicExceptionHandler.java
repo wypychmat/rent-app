@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.wypychmat.rentals.rentapp.app.core.exception.dto.BasicErrorResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.exception.BasicErrorResponse;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.SimpleDateFormat;

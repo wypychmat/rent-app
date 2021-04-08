@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: dev
   mail:
     password: ${EMAIL_PASS}
     username: ${EMAIL_USER}

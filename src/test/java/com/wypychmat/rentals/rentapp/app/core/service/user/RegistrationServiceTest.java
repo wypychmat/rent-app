@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.request.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.dto.response.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.SimpleEmailMessageService;
 import org.junit.jupiter.api.BeforeAll;
