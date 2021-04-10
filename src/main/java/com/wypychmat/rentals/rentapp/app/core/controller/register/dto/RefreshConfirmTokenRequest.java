@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.dto.registration;
+package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
 
 import javax.validation.constraints.NotBlank;
 

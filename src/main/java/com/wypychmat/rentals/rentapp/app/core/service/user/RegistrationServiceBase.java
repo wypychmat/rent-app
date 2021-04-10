@@ -1,9 +1,9 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;

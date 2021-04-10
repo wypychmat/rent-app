@@ -1,17 +1,16 @@
-package com.wypychmat.rentals.rentapp.app.core.controller;
+package com.wypychmat.rentals.rentapp.app.core.controller.register;
 
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
 import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -44,9 +43,5 @@ public class RegisterControllerV1 {
     @PostMapping(path = "/" + "${api.path.register.refresh}")
     public void generateNewConfirmationToken(@RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
         registrationService.refreshTokenForUser(refreshConfirmTokenRequest);
-//        return user.map(item -> ResponseEntity.status(HttpStatus.CREATED)
-//                .body(messageProvider.getRegistrationResponse(item)))
-//                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
-
 }

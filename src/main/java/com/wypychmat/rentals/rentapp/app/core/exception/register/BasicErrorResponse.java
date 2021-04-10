@@ -1,13 +1,13 @@
-package com.wypychmat.rentals.rentapp.app.core.dto.exception;
+package com.wypychmat.rentals.rentapp.app.core.exception.register;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-public class BasicErrorResponse {
+class BasicErrorResponse {
     private int status;
     private String issuedAt;
     @JsonView({InvalidUserRequestException.class})

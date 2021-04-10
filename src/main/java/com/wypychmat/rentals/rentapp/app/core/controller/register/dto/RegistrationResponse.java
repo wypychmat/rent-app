@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.dto.registration;
+package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;

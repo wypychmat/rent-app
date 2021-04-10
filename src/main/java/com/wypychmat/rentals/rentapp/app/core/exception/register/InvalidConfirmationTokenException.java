@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.exception;
+package com.wypychmat.rentals.rentapp.app.core.exception.register;
 
 import org.springframework.http.HttpStatus;
 

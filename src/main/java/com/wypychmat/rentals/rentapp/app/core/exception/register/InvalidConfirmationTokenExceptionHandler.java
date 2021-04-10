@@ -1,9 +1,6 @@
-package com.wypychmat.rentals.rentapp.app.core.exception.handler;
+package com.wypychmat.rentals.rentapp.app.core.exception.register;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
-import com.wypychmat.rentals.rentapp.app.core.dto.exception.BasicErrorResponse;
-import com.wypychmat.rentals.rentapp.app.core.util.Constant;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,9 +11,9 @@ import static com.wypychmat.rentals.rentapp.app.core.util.Constant.JSON_CONTENT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @ControllerAdvice
-public class InvalidConfirmationTokenExceptionHandler extends BasicExceptionHandler {
+class InvalidConfirmationTokenExceptionHandler extends BasicExceptionHandler {
     @ExceptionHandler(value = {InvalidConfirmationTokenException.class})
-    protected ResponseEntity<Object> invalidRequestHandler(InvalidConfirmationTokenException ex,
+    ResponseEntity<Object> invalidRequestHandler(InvalidConfirmationTokenException ex,
                                                            WebRequest request) throws JsonProcessingException {
         String body = getBody(new BasicErrorResponse(
                 ex.getHttpStatus(),
@@ -27,7 +24,7 @@ public class InvalidConfirmationTokenExceptionHandler extends BasicExceptionHand
     }
 
     @Override
-    protected Class<? extends RuntimeException> setView() {
+    Class<? extends RuntimeException> setView() {
         return InvalidConfirmationTokenException.class;
     }
 }

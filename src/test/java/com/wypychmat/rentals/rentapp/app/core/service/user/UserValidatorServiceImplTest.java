@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;

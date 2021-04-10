@@ -1,31 +1,31 @@
-package com.wypychmat.rentals.rentapp.app.core.exception.handler;
+package com.wypychmat.rentals.rentapp.app.core.exception.register;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.wypychmat.rentals.rentapp.app.core.dto.exception.BasicErrorResponse;
+import com.wypychmat.rentals.rentapp.app.core.util.Constant;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class BasicExceptionHandler extends ResponseEntityExceptionHandler {
+import static com.wypychmat.rentals.rentapp.app.core.util.Constant.*;
 
-    private final SimpleDateFormat simpleDateFormat;
+abstract class BasicExceptionHandler extends ResponseEntityExceptionHandler {
+
     private final ObjectWriter objectWriter;
 
-    protected abstract Class<? extends RuntimeException> setView();
+    abstract Class<? extends RuntimeException> setView();
 
-    public BasicExceptionHandler() {
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    BasicExceptionHandler() {
         objectWriter = new ObjectMapper()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .writerWithView(setView());
     }
 
     String getBody(BasicErrorResponse basicErrorResponse) throws JsonProcessingException {
-        basicErrorResponse.setIssuedAt(simpleDateFormat.format(new Date()));
+        basicErrorResponse.setIssuedAt(new SimpleDateFormat(DATA_PATTERN).format(new Date()));
         return objectWriter.writeValueAsString(basicErrorResponse);
     }
 }

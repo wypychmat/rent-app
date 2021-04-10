@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.dto.registration;
+package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
 
 
 import com.wypychmat.rentals.rentapp.app.core.validation.user.RePasswordConstraint;
@@ -17,7 +17,7 @@ public class RegistrationRequest {
     @UsernameConstraint
     private String username;
 
-    @Size(max = 60,message = "{com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest.password.Max}")
+    @Size(max = 60,message = "{com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest.password.Max}")
     @PasswordConstraint
     private String password;
 
