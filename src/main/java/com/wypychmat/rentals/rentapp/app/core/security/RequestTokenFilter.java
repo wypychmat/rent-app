@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 // TODO: 27.03.2021 change messages provider to Validator
@@ -38,33 +37,37 @@ class RequestTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (header != null && !header.isEmpty() && !header.isBlank() && header.startsWith(jwtConfig.getPrefix())) {
-            try {
-                String token = header.substring(jwtConfig.getPrefix().length());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
-                Map<String, Claim> claims = decodedJWT.getClaims();
-                Claim username = claims.get("iss");
-                Claim claimAuthorities = claims.get("authorities");
-                List<String> authorities = claimAuthorities.asList(String.class);
-                SecurityContextHolder.getContext().setAuthentication(
-                        new UsernamePasswordAuthenticationToken(
-                                username,
-                                null,
-                                authorities.stream()
-                                        .map(SimpleGrantedAuthority::new)
-                                        .collect(Collectors.toSet())));
-            } catch (TokenExpiredException e) {
-                request.setAttribute("customErrorMessage",e.getMessage());
-                e.printStackTrace();
-            } catch (SignatureVerificationException e) {
-                e.printStackTrace();
-                request.setAttribute("customErrorMessage","Invalid signature");
-            }
-            catch (JWTVerificationException e) {
-                e.printStackTrace();
-                request.setAttribute("customErrorMessage","Cannot verify token");
-            }
+            attemptToAuthentication(request, header);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void attemptToAuthentication(HttpServletRequest request, String header) {
+        try {
+            String token = header.substring(jwtConfig.getPrefix().length());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            Map<String, Claim> claims = decodedJWT.getClaims();
+            Claim username = claims.get("iss");
+            Claim claimAuthorities = claims.get("authorities");
+            List<String> authorities = claimAuthorities.asList(String.class);
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            authorities.stream()
+                                    .map(SimpleGrantedAuthority::new)
+                                    .collect(Collectors.toSet())));
+        } catch (TokenExpiredException e) {
+            request.setAttribute("customErrorMessage",e.getMessage());
+            e.printStackTrace();
+        } catch (SignatureVerificationException e) {
+            e.printStackTrace();
+            request.setAttribute("customErrorMessage","Invalid signature");
+        }
+        catch (JWTVerificationException e) {
+            e.printStackTrace();
+            request.setAttribute("customErrorMessage","Cannot verify token");
+        }
     }
 }
