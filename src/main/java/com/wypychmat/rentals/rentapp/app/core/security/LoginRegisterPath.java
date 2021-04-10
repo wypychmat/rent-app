@@ -14,11 +14,14 @@ public class LoginRegisterPath {
     @Value("${api.path.login}")
     private String loginPath;
 
-    @Value("${api.path.register}")
+    @Value("${api.path.register.base}")
     private String registerPath;
 
-    @Value("${api.path.confirm}")
+    @Value("${api.path.register.confirm}")
     private String confirm;
+
+    @Value("${api.path.register.refresh}")
+    private String refresh;
 
 
     @Value("${api.param.register.token}")
@@ -26,11 +29,15 @@ public class LoginRegisterPath {
 
 
     public String getMatcherLoginPath() {
-        return baseUrl + loginPath + prefix + "{\\d*}";
+        return baseUrl + loginPath + "/" + prefix + "{\\d*}";
     }
 
     public String getMatcherRegisterPath() {
         return baseUrl + registerPath;
+    }
+
+    public String getMatcherRegisterRefreshPath() {
+        return baseUrl + registerPath + "/" + refresh;
     }
 
     public String getConfirm() {

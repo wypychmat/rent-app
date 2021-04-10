@@ -1,6 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.controller;
 
 
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
 import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
@@ -10,12 +11,13 @@ import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("${api.base}" + "${api.path.register}")
+@RequestMapping(path = "${api.base}" + "${api.path.register.base}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
 public class RegisterControllerV1 {
     private final RegistrationService registrationService;
     private final RegistrationMessageProvider messageProvider;
@@ -25,7 +27,7 @@ public class RegisterControllerV1 {
         this.messageProvider = new RegistrationMessageProvider(messageSource);
     }
 
-    @PostMapping(produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
+    @PostMapping
     public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
         Optional<UserDto> user = registrationService.registerUser(registrationRequest);
         return user.map(item -> ResponseEntity.status(HttpStatus.CREATED)
@@ -33,10 +35,18 @@ public class RegisterControllerV1 {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
-    @GetMapping("/v1/" + "${api.path.confirm}")
+    @GetMapping(value = "/v1/" + "${api.path.register.confirm}", consumes = {ApiVersion.ANY})
     public ResponseEntity<RegistrationResponse> confirm(@RequestParam("${api.param.register.token}") String token) {
         UserDto userDto = registrationService.confirmToken(token);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(messageProvider.getConfirmationResponse(userDto));
+    }
+
+    @PostMapping(path = "/" + "${api.path.register.refresh}")
+    public void generateNewConfirmationToken(@RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        registrationService.refreshTokenForUser(refreshConfirmTokenRequest);
+//        return user.map(item -> ResponseEntity.status(HttpStatus.CREATED)
+//                .body(messageProvider.getRegistrationResponse(item)))
+//                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 class UserValidatorServiceImpl implements UserValidatorService {
@@ -39,5 +41,15 @@ class UserValidatorServiceImpl implements UserValidatorService {
             errors.put(s, message);
         });
         throw new InvalidUserRequestException("invalid request", errors);
+    }
+
+    @Override
+    public void verifyRefreshConfirmationTokenRequest(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        Set<ConstraintViolation<RefreshConfirmTokenRequest>> validate = validator.validate(refreshConfirmTokenRequest);
+        if (!validate.isEmpty()) {
+            Map<String, String> errors = validate.stream()
+                    .collect(Collectors.toMap(e -> e.getPropertyPath().toString(), ConstraintViolation::getMessage));
+            throw new InvalidUserRequestException("invalid request", errors);
+        }
     }
 }

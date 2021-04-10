@@ -22,4 +22,5 @@ interface RegisterUserDao {
     void enableUserById(Long id);
 
 
+    void deleteTokenExpectGiven(RegisterToken registerToken, long userId);
 }

@@ -1,5 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
@@ -36,5 +37,10 @@ abstract class RegistrationServiceBase extends RegistrationService {
         } else {
             throw new InvalidConfirmationTokenException("Token must not be empty", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public void refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        attemptRefreshTokenForUser(refreshConfirmTokenRequest);
     }
 }

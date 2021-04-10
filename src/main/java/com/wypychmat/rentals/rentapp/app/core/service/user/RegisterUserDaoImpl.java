@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 class RegisterUserDaoImpl implements RegisterUserDao {
@@ -84,5 +85,10 @@ class RegisterUserDaoImpl implements RegisterUserDao {
     @Override
     public void enableUserById(Long id) {
         userRepository.enableUserById(id);
+    }
+
+    @Override
+    public void deleteTokenExpectGiven(RegisterToken registerToken, long userId) {
+        CompletableFuture.runAsync(() -> registerTokenRepository.deleteTokenExpectGiven(registerToken.getId(), userId));
     }
 }

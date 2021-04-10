@@ -65,7 +65,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, loginRegisterPath.getMatcherRegisterPath())
                 .permitAll()
-                .regexMatchers(HttpMethod.GET,loginRegisterPath.getRegexForConfirmPath())
+                .antMatchers(HttpMethod.POST, loginRegisterPath.getMatcherRegisterRefreshPath()).permitAll()
+                .regexMatchers(HttpMethod.GET, loginRegisterPath.getRegexForConfirmPath())
                 .permitAll()
                 .anyRequest()
                 .authenticated();
