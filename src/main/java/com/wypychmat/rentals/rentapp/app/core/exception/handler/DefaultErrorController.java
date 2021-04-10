@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorCon
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-@RestController
+@Controller
 public class DefaultErrorController extends AbstractErrorController {
 
     private static final String PATH = "/error";
@@ -27,7 +28,7 @@ public class DefaultErrorController extends AbstractErrorController {
         super(errorAttributes);
     }
 
-    @RequestMapping(value = PATH)
+    @RequestMapping(value = PATH, produces = {"*/*"})
     public void error(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpStatus status = getStatus(request);
         response.addHeader("Content-Type", "application/json");
@@ -42,7 +43,7 @@ public class DefaultErrorController extends AbstractErrorController {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .writeValue(response.getWriter(), new ErrorResponse(status, path,
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()),customErrorMessage));
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),customErrorMessage));
     }
 
     @Override

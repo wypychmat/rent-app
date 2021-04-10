@@ -3,6 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.service.mail;
 import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
 import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationMessagePayload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,6 +18,9 @@ import java.util.function.Function;
 @Service
 @MailService
 class MimeEmailService extends GenericEmailService<MimeMessage> {
+
+    @Value("${config.email.hostAndPort}")
+    String hostAndPort;
 
     @Autowired
     MimeEmailService(JavaMailSender javaMailSender,
@@ -44,7 +48,7 @@ class MimeEmailService extends GenericEmailService<MimeMessage> {
             throws MessagingException {
         Optional<String> resourceString = getResourceString();
         if (resourceString.isPresent()) {
-            String path = getConfirmationPath() + registrationMessagePayload.getToken();
+            String path = hostAndPort + getConfirmationPath() + registrationMessagePayload.getToken();
             MessageFormat formatter = new MessageFormat(resourceString.get());
             String format = formatter.format(new Object[]{
                     registrationMessagePayload.getUsername(),

@@ -42,6 +42,10 @@ api:
     register:
       token: token
 
+config:
+  email:
+    hostAndPort: http://localhost:8080
+
 
 
 

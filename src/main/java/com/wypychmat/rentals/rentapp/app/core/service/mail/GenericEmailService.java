@@ -61,13 +61,13 @@ abstract class GenericEmailService<T> implements EmailService {
                 if (message.isPresent()) {
                     Optional<Exception> optionalException = send().apply(message.get());
                     if (optionalException.isPresent())
-                        throw new MessagingException("Empty email message", optionalException.get());
+                        throw new MessagingException("Error during sending email", optionalException.get());
                 } else {
                     throw new MessagingException("Empty email message");
                 }
             } catch (MessagingException e) {
                 e.printStackTrace();
-                LOGGER.error("Registration email to: " + registrationMessagePayload.getEmail() + "wasn't send");
+                LOGGER.error("Registration email to: " + registrationMessagePayload.getEmail() + " wasn't send");
             }
         };
     }
@@ -76,9 +76,8 @@ abstract class GenericEmailService<T> implements EmailService {
         CompletableFuture.runAsync(send);
     }
 
-    // TODO: 28.03.2021 change later to frontendPath
     protected String getConfirmationPath() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + loginRegisterPath.getConfirmPath();
+        return loginRegisterPath.getConfirmPath();
     }
 
     protected abstract Optional<T> getMessage(RegistrationMessagePayload registrationMessagePayload) throws MessagingException;
