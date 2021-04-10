@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 public @interface PasswordConstraint {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidPassword.message}";
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.user.PasswordConstraint.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "password";

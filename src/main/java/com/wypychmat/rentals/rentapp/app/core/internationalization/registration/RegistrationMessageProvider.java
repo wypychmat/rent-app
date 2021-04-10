@@ -20,23 +20,30 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
     }
 
     public RegistrationResponse getRegistrationResponse(UserDto user) {
+        return getResponse("register.wait.for.email",
+                user.getEmail(),
+                HttpStatus.CREATED,
+                user.getId());
+    }
+
+    private RegistrationResponse getResponse(String messageKey,
+                                             String userSpecificParam,
+                                             HttpStatus httpStatus,
+                                             long userId) {
         MessageFormat formatter =
-                new MessageFormat(getLocalizedMessage("register.wait.for.email"));
-        String message = formatter.format(new Object[]{user.getEmail()});
-        return new RegistrationResponse(HttpStatus.CREATED,
-                user.getId(),
+                new MessageFormat(getLocalizedMessage(messageKey));
+        String message = formatter.format(new Object[]{userSpecificParam});
+        return new RegistrationResponse(httpStatus,
+                userId,
                 message);
     }
 
-    public RegistrationResponse getConfirmationResponse(User user) {
-        MessageFormat formatter =
-                new MessageFormat(getLocalizedMessage("register.wait.for.email"));
-        String message = formatter.format(new Object[]{user.getEmail()});
-        return new RegistrationResponse(HttpStatus.CREATED,
-                user.getId(),
-                message);
+    public RegistrationResponse getConfirmationResponse(UserDto user) {
+        return getResponse("register.confirmed",
+                user.getUsername(),
+                HttpStatus.ACCEPTED,
+                user.getId());
     }
-
 
     public Map<String, String> getRegistrationErrors(RegistrationRequest registrationRequest, UsernameEmail user) {
         String withGiven = getLocalizedMessage("error.user.with.given");

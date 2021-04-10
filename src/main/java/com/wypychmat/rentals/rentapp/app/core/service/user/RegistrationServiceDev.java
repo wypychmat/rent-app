@@ -7,6 +7,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
+
 // TODO: 27.03.2021 add messages form properties
 
 @Service
@@ -19,5 +21,8 @@ class RegistrationServiceDev extends RegistrationServiceBase {
                                   @MailService EmailService emailService,
                                   MessageSource messageSource) {
         super(userValidatorService, registerUserDao, emailService, messageSource);
+        System.out.println("message source");
+        String message = messageSource.getMessage("com.wypychmat.rentals.rentapp.app.core.validation.user.RePasswordConstraint.message", null, Locale.getDefault());
+        System.out.println(message);
     }
 }

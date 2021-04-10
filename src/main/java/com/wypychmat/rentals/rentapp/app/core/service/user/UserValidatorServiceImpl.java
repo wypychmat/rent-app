@@ -32,7 +32,7 @@ class UserValidatorServiceImpl implements UserValidatorService {
             String s = propertyPath.toString();
             if (s.equals(""))
                 s = item.getConstraintDescriptor().getAttributes().get("property").toString();
-            if (errors.containsKey(s)) {
+            if (s != null && errors.containsKey(s)) {
                 String s1 = errors.get(s);
                 message = s1 + ";" + message;
             }

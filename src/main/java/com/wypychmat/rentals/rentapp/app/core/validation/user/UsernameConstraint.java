@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 public @interface UsernameConstraint {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidUsername.message}";
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.user.UsernameConstraint.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "username";
