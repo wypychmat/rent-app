@@ -3,9 +3,11 @@ package com.wypychmat.rentals.rentapp.app.core.exception.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wypychmat.rentals.rentapp.app.core.util.Constant;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import static com.wypychmat.rentals.rentapp.app.core.util.Constant.JSON_CONTENT;
+
 @Controller
 public class DefaultErrorController extends AbstractErrorController {
 
@@ -31,7 +35,7 @@ public class DefaultErrorController extends AbstractErrorController {
     @RequestMapping(value = PATH, produces = {"*/*"})
     public void error(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpStatus status = getStatus(request);
-        response.addHeader("Content-Type", "application/json");
+        response.addHeader(HttpHeaders.CONTENT_TYPE, JSON_CONTENT);
         response.setStatus(status.value());
 
         Map<String, Object> errorAttributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());

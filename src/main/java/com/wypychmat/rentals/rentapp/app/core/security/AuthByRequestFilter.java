@@ -3,6 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -90,7 +91,7 @@ class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
 
     private void createResponse(HttpServletResponse response, LoginResponse loginResponse) {
         try {
-            response.addHeader("Content-Type", jwtConfig.getContentType());
+            response.addHeader(HttpHeaders.CONTENT_TYPE, jwtConfig.getContentType());
             response.setStatus(loginResponse.getStatus());
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             objectMapper.writeValue(response.getWriter(), loginResponse);
