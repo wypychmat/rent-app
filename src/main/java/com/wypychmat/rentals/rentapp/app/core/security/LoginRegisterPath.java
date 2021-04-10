@@ -24,16 +24,13 @@ public class LoginRegisterPath {
     @Value("${api.param.register.token}")
     private String token;
 
-    @Value("${api.version.newest}")
-    private String currentVersion;
-
 
     public String getMatcherLoginPath() {
-        return getPath(baseUrl + loginPath);
+        return baseUrl + loginPath + prefix + "{\\d*}";
     }
 
     public String getMatcherRegisterPath() {
-        return getPath(baseUrl + registerPath);
+        return baseUrl + registerPath;
     }
 
     public String getConfirm() {
@@ -44,9 +41,6 @@ public class LoginRegisterPath {
         return prefix;
     }
 
-    public String getCurrentVersion() {
-        return currentVersion;
-    }
 
     public String getUriWithTokenParam() {
         return baseUrl + registerPath + confirm + token + "=";
@@ -57,8 +51,16 @@ public class LoginRegisterPath {
                 confirm + "\\?" + token + "\\=.*";
     }
 
-    public String getConfirmPath() {
-        return baseUrl + registerPath + currentVersion +"/" + confirm + "?" + token + "=";
+    public String getConfirmPathV1() {
+        return getConfirmPathByVersion("/v1/");
+    }
+
+    public String getConfirmPathV2() {
+        return getConfirmPathByVersion("/v2/");
+    }
+
+    private String getConfirmPathByVersion(String version) {
+        return baseUrl + registerPath + version + confirm + "?" + token + "=";
     }
 
     private String removeSlashes(String toReplace) {
@@ -66,7 +68,4 @@ public class LoginRegisterPath {
     }
 
 
-    private String getPath(String basePath) {
-        return basePath + prefix + "{\\d*}";
-    }
 }

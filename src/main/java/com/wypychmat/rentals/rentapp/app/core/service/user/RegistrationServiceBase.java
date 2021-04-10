@@ -30,9 +30,9 @@ abstract class RegistrationServiceBase extends RegistrationService {
     }
 
     @Override
-    public void confirmToken(String token) {
+    public UserDto confirmToken(String token) {
         if (token != null && !token.trim().equals("")) {
-            attemptTokenConfirmation(token);
+            return attemptTokenConfirmation(token);
         } else {
             throw new InvalidConfirmationTokenException("Token must not be empty", HttpStatus.BAD_REQUEST);
         }

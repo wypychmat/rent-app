@@ -15,14 +15,13 @@ public class InternationalizationConfig {
     @Bean
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver sessionLocaleResolver = new AcceptHeaderLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(Locale.UK);
+        sessionLocaleResolver.setDefaultLocale(Locale.getDefault());
         return sessionLocaleResolver;
     }
 
 
     @Bean
     public MessageSource messageSource() {
-        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         ReloadableResourceBundleMessageSource reloadableResourceBundleMessageSource = new ReloadableResourceBundleMessageSource();
         reloadableResourceBundleMessageSource.setBasenames(
                 "classpath:internationalization/messages/messages",

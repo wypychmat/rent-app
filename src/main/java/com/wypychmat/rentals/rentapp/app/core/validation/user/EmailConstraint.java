@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, CONSTRUCTOR, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 public @interface EmailConstraint {
-    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.ValidEmail.message}";
+    String message() default "{com.wypychmat.rentals.rentapp.app.core.validation.user.EmailConstraint.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String property() default "email";

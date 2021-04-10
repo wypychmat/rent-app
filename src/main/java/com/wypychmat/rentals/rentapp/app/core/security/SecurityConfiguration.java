@@ -58,10 +58,10 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new AuthByRequestFilter(authenticationManager(), algorithm, jwtConfig,
+                .addFilterBefore(new LoginByRequestFilter(authenticationManager(), algorithm, jwtConfig,
                                 loginRegisterPath.getMatcherLoginPath()),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new RequestTokenFilter(jwtConfig, algorithm), AuthByRequestFilter.class)
+                .addFilterAfter(new RequestTokenFilter(jwtConfig, algorithm), LoginByRequestFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, loginRegisterPath.getMatcherRegisterPath())
                 .permitAll()
@@ -75,7 +75,6 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
-//        auth.userDetailsService(applicationUserService).passwordEncoder(passwordEncoder);
     }
 
     @Bean

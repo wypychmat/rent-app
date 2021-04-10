@@ -35,7 +35,7 @@ api:
     prefix: v
     newest: v1
   path:
-    register: register/
+    register: register
     confirm: confirm
     login: login/
   param:

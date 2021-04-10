@@ -37,7 +37,7 @@ public abstract class RegistrationService {
 
     public abstract Optional<UserDto> registerUser(RegistrationRequest registrationRequest);
 
-    public abstract void confirmToken(String token);
+    public abstract UserDto confirmToken(String token);
 
     protected boolean isRequestValid(RegistrationRequest registrationRequest) {
         return userValidatorService.verifyRegistrationRequest(registrationRequest);
@@ -61,7 +61,7 @@ public abstract class RegistrationService {
             Optional<RegisterToken> savedToken = registerUserDao.saveToken(newToken);
             if (savedToken.isPresent()) {
                 emailService.sendEmail(mapRegistrationToken(newToken));
-                return Optional.of(new UserDto(user.getId(),user.getUsername(),user.getEmail()));
+                return Optional.of(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
             } else {
                 registerUserDao.deleteUserByUsername(user.getUsername());
             }
@@ -71,27 +71,29 @@ public abstract class RegistrationService {
         return Optional.empty();
     }
 
-    protected void attemptTokenConfirmation(String token) {
+    protected UserDto attemptTokenConfirmation(String token) {
         Optional<RegisterToken> registerToken = registerUserDao.findToken(token);
         if (registerToken.isPresent()) {
-            proceedOnConfirmationToken(registerToken.get());
+           return proceedOnConfirmationToken(registerToken.get());
         } else {
             throw new InvalidConfirmationTokenException("Invalid Registration Token", HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    private void proceedOnConfirmationToken(RegisterToken registerToken) {
+    private UserDto proceedOnConfirmationToken(RegisterToken registerToken) {
         checkIsTokenAlreadyConfirmed(registerToken);
         checkIsTokenNotExpired(registerToken);
-        enableUser(registerToken);
+       return enableUser(registerToken);
     }
 
-    private void enableUser(RegisterToken registerToken) {
+    private UserDto enableUser(RegisterToken registerToken) {
         registerToken.setConfirmedAt(LocalDateTime.now());
         registerToken.setConfirmed(true);
-        Long userId = registerToken.getUser().getId();
+        User user = registerToken.getUser();
+        Long userId = user.getId();
         registerUserDao.saveToken(registerToken);
         registerUserDao.enableUserById(userId);
+        return new UserDto(userId, user.getUsername(), user.getEmail());
     }
 
     private void checkIsTokenNotExpired(RegisterToken registerToken) {

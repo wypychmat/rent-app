@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -77,7 +76,7 @@ abstract class GenericEmailService<T> implements EmailService {
     }
 
     protected String getConfirmationPath() {
-        return loginRegisterPath.getConfirmPath();
+        return loginRegisterPath.getConfirmPathV1();
     }
 
     protected abstract Optional<T> getMessage(RegistrationMessagePayload registrationMessagePayload) throws MessagingException;

@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -21,21 +23,34 @@ import java.time.ZoneId;
 import java.util.Date;
 
 // TODO: 27.03.2021 change messages provider to Validator
-class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
+class LoginByRequestFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper;
     private final JwtConfig jwtConfig;
     private final ZoneId zoneId;
 
-    AuthByRequestFilter(AuthenticationManager authenticationManager,Algorithm algorithm, JwtConfig jwtConfig,
-                        String loginPath) {
+    LoginByRequestFilter(AuthenticationManager authenticationManager, Algorithm algorithm, JwtConfig jwtConfig,
+                         String loginPath) {
         this.jwtConfig = jwtConfig;
         objectMapper = new ObjectMapper();
         this.authenticationManager = authenticationManager;
         zoneId = ZoneId.systemDefault();
         setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(loginPath, "POST"));
-        setAuthenticationSuccessHandler((rq, rs, a) -> {
+        setAuthenticationSuccessHandler(getAuthenticationSuccessHandler(algorithm, jwtConfig));
+        setAuthenticationFailureHandler(getAuthenticationFailureHandler());
+    }
+
+    private AuthenticationFailureHandler getAuthenticationFailureHandler() {
+        return (rq, rs, a) -> createResponse(rs,
+                new LoginErrorResponse(HttpServletResponse.SC_UNAUTHORIZED,
+                        Date.from(LocalDateTime.now().atZone(zoneId).toInstant()),
+                        "Invalid username or password"
+                ));
+    }
+
+    private AuthenticationSuccessHandler getAuthenticationSuccessHandler(Algorithm algorithm, JwtConfig jwtConfig) {
+        return (rq, rs, a) -> {
             LocalDateTime localDateTime = LocalDateTime.now();
             Date nowDate = Date.from(localDateTime.atZone(zoneId).toInstant());
             Date expiresAt = Date.from(localDateTime.plusMinutes(jwtConfig.getExpirationInMin())
@@ -52,12 +67,7 @@ class AuthByRequestFilter extends UsernamePasswordAuthenticationFilter {
                     nowDate,
                     expiresAt,
                     jwtConfig.getPrefix() + token));
-        });
-        setAuthenticationFailureHandler((rq, rs, a) -> createResponse(rs,
-                new LoginErrorResponse(HttpServletResponse.SC_UNAUTHORIZED,
-                Date.from(LocalDateTime.now().atZone(zoneId).toInstant()),
-                "Invalid username or password"
-        )));
+        };
     }
 
     @Override
