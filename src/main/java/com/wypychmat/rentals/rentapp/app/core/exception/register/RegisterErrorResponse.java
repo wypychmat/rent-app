@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-class BasicErrorResponse {
+class RegisterErrorResponse {
     private int status;
     private String issuedAt;
     @JsonView({InvalidUserRequestException.class})
@@ -15,18 +15,18 @@ class BasicErrorResponse {
     @JsonView({InvalidConfirmationTokenException.class})
     private String error;
 
-    public BasicErrorResponse(HttpStatus status, Map<String, String> errors) {
+    public RegisterErrorResponse(HttpStatus status, Map<String, String> errors) {
         this.status = status.value();
         this.errors = errors;
     }
 
 
-    public BasicErrorResponse(HttpStatus status, String error) {
+    public RegisterErrorResponse(HttpStatus status, String error) {
         this.status = status.value();
         this.error = error;
     }
 
-    public BasicErrorResponse() {
+    public RegisterErrorResponse() {
     }
 
     public int getStatus() {

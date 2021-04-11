@@ -12,13 +12,13 @@ import static com.wypychmat.rentals.rentapp.app.core.util.Constant.*;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @ControllerAdvice
-class InvalidUserRequestExceptionHandler extends BasicExceptionHandler {
+class InvalidUserRequestExceptionHandler extends RegisterExceptionHandler {
 
     @ExceptionHandler(value
             = {InvalidUserRequestException.class})
     ResponseEntity<Object> invalidRequestHandler(InvalidUserRequestException ex,
                                                            WebRequest request) throws JsonProcessingException {
-        String body = getBody(new BasicErrorResponse(
+        String body = getBody(new RegisterErrorResponse(
                 HttpStatus.CONFLICT,
                 ex.getErrors()));
         HttpHeaders httpHeaders = new HttpHeaders();

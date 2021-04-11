@@ -11,11 +11,11 @@ import static com.wypychmat.rentals.rentapp.app.core.util.Constant.JSON_CONTENT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @ControllerAdvice
-class InvalidConfirmationTokenExceptionHandler extends BasicExceptionHandler {
+class InvalidConfirmationTokenExceptionHandler extends RegisterExceptionHandler {
     @ExceptionHandler(value = {InvalidConfirmationTokenException.class})
     ResponseEntity<Object> invalidRequestHandler(InvalidConfirmationTokenException ex,
                                                            WebRequest request) throws JsonProcessingException {
-        String body = getBody(new BasicErrorResponse(
+        String body = getBody(new RegisterErrorResponse(
                 ex.getHttpStatus(),
                 ex.getMessage()));
         HttpHeaders httpHeaders = new HttpHeaders();
