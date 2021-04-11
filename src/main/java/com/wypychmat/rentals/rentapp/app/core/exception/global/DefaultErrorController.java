@@ -3,6 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.exception.global;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -23,17 +24,16 @@ import static com.wypychmat.rentals.rentapp.app.core.util.Constant.DATA_PATTERN;
 import static com.wypychmat.rentals.rentapp.app.core.util.Constant.JSON_CONTENT;
 
 @Controller
-class DefaultExceptionHandler extends AbstractErrorController {
+class DefaultErrorController extends AbstractErrorController {
 
     private static final String PATH = "/error";
 
-    DefaultExceptionHandler(ErrorAttributes errorAttributes) {
+    DefaultErrorController(ErrorAttributes errorAttributes) {
         super(errorAttributes);
     }
 
-    @RequestMapping(value = PATH, produces = {"*/*"})
+    @RequestMapping(value = PATH, consumes = {"*/*"}, produces = ApiVersion.JSON)
     public void error(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         HttpStatus httpStatus = getStatus(request);
         response.addHeader(HttpHeaders.CONTENT_TYPE, JSON_CONTENT);
         response.setStatus(httpStatus.value());
