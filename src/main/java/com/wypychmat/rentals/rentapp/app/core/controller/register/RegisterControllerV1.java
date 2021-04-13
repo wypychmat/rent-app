@@ -28,20 +28,30 @@ public class RegisterControllerV1 {
 
     @PostMapping
     public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
-        Optional<UserDto> user = registrationService.registerUser(registrationRequest);
-        return user.map(item -> ResponseEntity.status(HttpStatus.CREATED)
-                .body(messageProvider.getRegistrationResponse(item)))
+
+        return getRegistrationResponse(registrationService.registerUser(registrationRequest),
+                HttpStatus.CREATED);
+    }
+
+    private ResponseEntity<RegistrationResponse> getRegistrationResponse(Optional<UserDto> user, HttpStatus status) {
+
+        return user.map(item -> ResponseEntity.status(status)
+                .body(messageProvider.getRegistrationResponse(item,status)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @GetMapping(value = "/v1/" + "${api.path.register.confirm}", consumes = {ApiVersion.ANY})
     public ResponseEntity<RegistrationResponse> confirm(@RequestParam("${api.param.register.token}") String token) {
+
         UserDto userDto = registrationService.confirmToken(token);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(messageProvider.getConfirmationResponse(userDto));
     }
 
     @PostMapping(path = "/" + "${api.path.register.refresh}")
-    public void generateNewConfirmationToken(@RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
-        registrationService.refreshTokenForUser(refreshConfirmTokenRequest);
+    public ResponseEntity<RegistrationResponse> generateNewConfirmationToken(
+            @RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+
+        return getRegistrationResponse(registrationService.refreshTokenForUser(refreshConfirmTokenRequest),
+                HttpStatus.OK);
     }
 }

@@ -2,13 +2,13 @@ package com.wypychmat.rentals.rentapp.app.core.exception.global;
 
 import org.springframework.http.HttpStatus;
 
- class GlobalException {
+public class GlobalException {
     private int errorStatus;
     private String errorDate;
     private String cause;
     private String path;
 
-     GlobalException(HttpStatus status, String errorDate, String cause, String path) {
+    public GlobalException(HttpStatus status, String errorDate, String cause, String path) {
         errorStatus = status.value();
         this.errorDate = errorDate;
         this.cause = cause;

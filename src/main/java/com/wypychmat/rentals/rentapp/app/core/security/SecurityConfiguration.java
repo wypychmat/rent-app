@@ -1,9 +1,11 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
+import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,8 +17,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.validation.Validator;
 
 
 @Configuration
@@ -26,42 +29,46 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
-    private final JwtConfig jwtConfig;
-    private final Algorithm algorithm;
     private final LoginRegisterPath loginRegisterPath;
+    private final AuthFilterDependency authFilterDependency;
+    private final LoginFilterDependency loginFilterDependency;
 
 
     @Autowired
     SecurityConfiguration(PasswordEncoder passwordEncoder,
                           @UserDetailsServiceSelector UserDetailsService userDetailsService,
-                          @AuthEntryPoint AuthenticationEntryPoint authenticationEntryPoint,
                           RsaKeyConfig rsaKeyConfig,
-                          JwtConfig jwtConfig, LoginRegisterPath loginRegisterPath) {
+                          JwtConfig jwtConfig, LoginRegisterPath loginRegisterPath,
+                          Validator validator, MessageProviderCenter messageProviderCenter) {
 
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.jwtConfig = jwtConfig;
         this.loginRegisterPath = loginRegisterPath;
         KeyProvider keyProvider = new KeyProvider(rsaKeyConfig);
-        this.algorithm = Algorithm.RSA256(keyProvider.getPublicKey(), keyProvider.getPrivateKey());
+        authFilterDependency = new AuthFilterDependency(
+                messageProviderCenter,
+                Algorithm.RSA256(keyProvider.getPublicKey(), keyProvider.getPrivateKey()),
+                jwtConfig);
+        loginFilterDependency = LoginFilterDependency.from(authFilterDependency,
+                loginRegisterPath.getMatcherLoginPath(),
+                validator);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        loginFilterDependency.setAuthenticationManager(authenticationManager());
         http
                 .csrf()
 //                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .disable() // for Postman
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
+                .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointHandler())
+                .accessDeniedHandler(new CustomAccessDeniedHandler()).and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new LoginByRequestFilter(authenticationManager(), algorithm, jwtConfig,
-                                loginRegisterPath.getMatcherLoginPath()),
+                .addFilterBefore(new LoginByRequestFilter(loginFilterDependency),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new RequestTokenFilter(jwtConfig, algorithm), LoginByRequestFilter.class)
+                .addFilterAfter(new RequestTokenFilter(authFilterDependency), LoginByRequestFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, loginRegisterPath.getMatcherRegisterPath())
                 .permitAll()
@@ -78,13 +85,12 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
-    @Bean
+
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
-
 
 }

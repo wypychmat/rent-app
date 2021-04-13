@@ -17,34 +17,35 @@ import java.util.stream.Collectors;
 class UserValidatorServiceImpl implements UserValidatorService {
     private final Validator validator;
 
-
     public UserValidatorServiceImpl(Validator validator) {
         this.validator = validator;
     }
 
-    public boolean verifyRegistrationRequest(RegistrationRequest request) {
+    public void verifyRegistrationRequestOrThrow(RegistrationRequest request) throws InvalidUserRequestException {
+
         Set<ConstraintViolation<RegistrationRequest>> validate = validator.validate(request);
-        if (validate.isEmpty()) {
-            return true;
+        if (!validate.isEmpty()) {
+            Map<String, String> errors = new HashMap<>();
+            validate.forEach(item -> {
+                String message = item.getMessage();
+                Path propertyPath = item.getPropertyPath();
+                String s = propertyPath.toString();
+                if (s.equals(""))
+                    s = item.getConstraintDescriptor().getAttributes().get("property").toString();
+                if (s != null && errors.containsKey(s)) {
+                    String s1 = errors.get(s);
+                    message = s1 + ";" + message;
+                }
+                errors.put(s, message);
+            });
+            throw new InvalidUserRequestException("invalid request", errors);
         }
-        Map<String, String> errors = new HashMap<>();
-        validate.forEach(item -> {
-            String message = item.getMessage();
-            Path propertyPath = item.getPropertyPath();
-            String s = propertyPath.toString();
-            if (s.equals(""))
-                s = item.getConstraintDescriptor().getAttributes().get("property").toString();
-            if (s != null && errors.containsKey(s)) {
-                String s1 = errors.get(s);
-                message = s1 + ";" + message;
-            }
-            errors.put(s, message);
-        });
-        throw new InvalidUserRequestException("invalid request", errors);
     }
 
     @Override
-    public void verifyRefreshConfirmationTokenRequest(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+    public void verifyRefreshConfirmationTokenRequestOrThrow(RefreshConfirmTokenRequest refreshConfirmTokenRequest)
+            throws InvalidUserRequestException {
+
         Set<ConstraintViolation<RefreshConfirmTokenRequest>> validate = validator.validate(refreshConfirmTokenRequest);
         if (!validate.isEmpty()) {
             Map<String, String> errors = validate.stream()

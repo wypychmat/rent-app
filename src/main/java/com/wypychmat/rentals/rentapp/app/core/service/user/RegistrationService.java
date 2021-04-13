@@ -40,19 +40,27 @@ public abstract class RegistrationService {
 
     public abstract UserDto confirmToken(String token);
 
-    public abstract void refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest);
+    public abstract Optional<UserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest);
 
-    protected boolean isRequestValid(RegistrationRequest registrationRequest) {
-        return userValidatorService.verifyRegistrationRequest(registrationRequest);
-    }
 
-    protected void attemptRefreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
-        if(refreshConfirmTokenRequest != null){
-            userValidatorService.verifyRefreshConfirmationTokenRequest(refreshConfirmTokenRequest);
+    protected Optional<UserDto> attemptRefreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+
+        userValidatorService.verifyRefreshConfirmationTokenRequestOrThrow(refreshConfirmTokenRequest);
+
+        Optional<User> optionalUser = registerUserDao.getUserWhenUserExistByUsernameAndEmail(refreshConfirmTokenRequest);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (!user.isEnabled()) {
+                return attemptToSaveRegistrationToken(user);
+            } else {
+                throw new InvalidConfirmationTokenException("Already Confirmed", HttpStatus.NOT_FOUND);
+            }
         }
+        throw new InvalidConfirmationTokenException("User Not EXIST", HttpStatus.NOT_FOUND);
     }
 
     protected Optional<UserDto> attemptRegistration(RegistrationRequest registrationRequest) {
+        userValidatorService.verifyRegistrationRequestOrThrow(registrationRequest);
         if (checkUserNotExist(registrationRequest)) {
             Optional<User> user = registerUserDao.saveUser(createUserFromRequest(registrationRequest));
             if (user.isPresent()) {

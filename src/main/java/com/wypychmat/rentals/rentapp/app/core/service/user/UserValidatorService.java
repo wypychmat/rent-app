@@ -2,10 +2,12 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 
 interface UserValidatorService {
 
-    boolean verifyRegistrationRequest(RegistrationRequest request);
+    void verifyRegistrationRequestOrThrow(RegistrationRequest request) throws InvalidUserRequestException;
 
-    void verifyRefreshConfirmationTokenRequest(RefreshConfirmTokenRequest refreshConfirmTokenRequest);
+    void verifyRefreshConfirmationTokenRequestOrThrow(RefreshConfirmTokenRequest refreshConfirmTokenRequest)
+            throws InvalidUserRequestException;
 }

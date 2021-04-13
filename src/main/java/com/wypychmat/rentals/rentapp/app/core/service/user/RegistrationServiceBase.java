@@ -24,10 +24,7 @@ abstract class RegistrationServiceBase extends RegistrationService {
 
     @Override
     public Optional<UserDto> registerUser(RegistrationRequest registrationRequest) {
-        if (isRequestValid(registrationRequest)) {
-            return attemptRegistration(registrationRequest);
-        }
-        return Optional.empty();
+        return attemptRegistration(registrationRequest);
     }
 
     @Override
@@ -40,7 +37,7 @@ abstract class RegistrationServiceBase extends RegistrationService {
     }
 
     @Override
-    public void refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
-        attemptRefreshTokenForUser(refreshConfirmTokenRequest);
+    public Optional<UserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        return attemptRefreshTokenForUser(refreshConfirmTokenRequest);
     }
 }

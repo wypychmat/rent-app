@@ -18,10 +18,10 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
         super(messageSource);
     }
 
-    public RegistrationResponse getRegistrationResponse(UserDto user) {
+    public RegistrationResponse getRegistrationResponse(UserDto user,HttpStatus status) {
         return getResponse("register.wait.for.email",
                 user.getEmail(),
-                HttpStatus.CREATED,
+                status,
                 user.getId());
     }
 
@@ -43,6 +43,7 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
                 HttpStatus.ACCEPTED,
                 user.getId());
     }
+
 
     public Map<String, String> getRegistrationErrors(RegistrationRequest registrationRequest, UsernameEmail user) {
         String withGiven = getLocalizedMessage("error.user.with.given");

@@ -20,8 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import static com.wypychmat.rentals.rentapp.app.core.util.Constant.DATA_PATTERN;
-import static com.wypychmat.rentals.rentapp.app.core.util.Constant.JSON_CONTENT;
+import static com.wypychmat.rentals.rentapp.app.core.util.ApiVersion.*;
+import static com.wypychmat.rentals.rentapp.app.core.util.Constant.*;
 
 @Controller
 class DefaultErrorController extends AbstractErrorController {
@@ -32,7 +32,7 @@ class DefaultErrorController extends AbstractErrorController {
         super(errorAttributes);
     }
 
-    @RequestMapping(value = PATH, consumes = {"*/*"}, produces = ApiVersion.JSON)
+    @RequestMapping(value = PATH, consumes = ANY, produces = ANY)
     public void error(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpStatus httpStatus = getStatus(request);
         response.addHeader(HttpHeaders.CONTENT_TYPE, JSON_CONTENT);
@@ -41,8 +41,8 @@ class DefaultErrorController extends AbstractErrorController {
         String cause = httpStatus.getReasonPhrase();
 
         Map<String, Object> errorAttributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());
-        if (request.getAttribute("customErrorMessage") != null)
-            cause += ", " + request.getAttribute("customErrorMessage").toString();
+        if (request.getAttribute(CUSTOM_ERROR_MESSAGE) != null)
+            cause += ", " + request.getAttribute(CUSTOM_ERROR_MESSAGE).toString();
 
         String path = errorAttributes.get("path").toString();
         new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)

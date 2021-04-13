@@ -6,7 +6,7 @@ public class RefreshConfirmTokenRequest {
     @NotBlank
     private String username;
     @NotBlank
-    private String password;
+    private String email;
 
     public String getUsername() {
         return username;
@@ -16,11 +16,11 @@ public class RefreshConfirmTokenRequest {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -2,15 +2,18 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 
 abstract class LoginResponse {
     protected int status;
+    protected String type;
     protected Date issuedAt;
 
-    LoginResponse(int status, Date issuedAt) {
-        this.status = status;
+    LoginResponse(HttpStatus httpStatus, Date issuedAt) {
+        this.status = httpStatus.value();
+        type = httpStatus.getReasonPhrase();
         this.issuedAt = issuedAt;
     }
 
@@ -28,5 +31,13 @@ abstract class LoginResponse {
 
     public void setIssuedAt(Date issuedAt) {
         this.issuedAt = issuedAt;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
