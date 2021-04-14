@@ -1,8 +1,9 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,7 @@ abstract class RegistrationServiceBase extends RegistrationService {
 
     @Override
     public Optional<UserDto> registerUser(RegistrationRequest registrationRequest) {
-        if (isRequestValid(registrationRequest)) {
-            return attemptRegistration(registrationRequest);
-        }
-        return Optional.empty();
+        return attemptRegistration(registrationRequest);
     }
 
     @Override
@@ -36,5 +34,10 @@ abstract class RegistrationServiceBase extends RegistrationService {
         } else {
             throw new InvalidConfirmationTokenException("Token must not be empty", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public Optional<UserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        return attemptRefreshTokenForUser(refreshConfirmTokenRequest);
     }
 }

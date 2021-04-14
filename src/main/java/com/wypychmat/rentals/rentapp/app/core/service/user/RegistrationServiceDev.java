@@ -21,8 +21,5 @@ class RegistrationServiceDev extends RegistrationServiceBase {
                                   @MailService EmailService emailService,
                                   MessageSource messageSource) {
         super(userValidatorService, registerUserDao, emailService, messageSource);
-        System.out.println("message source");
-        String message = messageSource.getMessage("com.wypychmat.rentals.rentapp.app.core.validation.user.RePasswordConstraint.message", null, Locale.getDefault());
-        System.out.println(message);
     }
 }

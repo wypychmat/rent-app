@@ -1,15 +1,12 @@
-package com.wypychmat.rentals.rentapp.app.core.security;
+package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
 
 import javax.validation.constraints.NotBlank;
 
-class LoginRequest {
+public class RefreshConfirmTokenRequest {
     @NotBlank
     private String username;
     @NotBlank
-    private String password;
-
-    LoginRequest() {
-    }
+    private String email;
 
     public String getUsername() {
         return username;
@@ -19,11 +16,11 @@ class LoginRequest {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

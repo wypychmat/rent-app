@@ -1,11 +1,10 @@
 package com.wypychmat.rentals.rentapp.app.core.internationalization.registration;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
-import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
@@ -19,10 +18,10 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
         super(messageSource);
     }
 
-    public RegistrationResponse getRegistrationResponse(UserDto user) {
+    public RegistrationResponse getRegistrationResponse(UserDto user,HttpStatus status) {
         return getResponse("register.wait.for.email",
                 user.getEmail(),
-                HttpStatus.CREATED,
+                status,
                 user.getId());
     }
 
@@ -44,6 +43,7 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
                 HttpStatus.ACCEPTED,
                 user.getId());
     }
+
 
     public Map<String, String> getRegistrationErrors(RegistrationRequest registrationRequest, UsernameEmail user) {
         String withGiven = getLocalizedMessage("error.user.with.given");

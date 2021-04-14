@@ -1,17 +1,18 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class UserValidatorServiceImplTest extends ValidationBase{
+class UserValidatorServiceImplTest extends ValidationBase {
 
     @ParameterizedTest(name = "should thrown {6} error when username={0}; password={1}; rePassword={2}; email={3};" +
             " firstname={4}; lastname={5}")
@@ -33,7 +34,7 @@ class UserValidatorServiceImplTest extends ValidationBase{
                 lastname);
         //when
         Executable verificationServiceRun = () -> userValidatorServiceImpl
-                .verifyRegistrationRequest(registrationRequest);
+                .verifyRegistrationRequestOrThrow(registrationRequest);
 
         // then
         InvalidUserRequestException invalidUserRequestException =
@@ -42,7 +43,7 @@ class UserValidatorServiceImplTest extends ValidationBase{
     }
 
     @Test
-    void shouldPassWhenRegistrationRequestIsValid(){
+    void shouldPassWhenRegistrationRequestIsValid() {
         //given
         RegistrationRequest registrationRequest = new
                 RegistrationRequest("username",
@@ -51,11 +52,13 @@ class UserValidatorServiceImplTest extends ValidationBase{
                 "email@email.com",
                 "firstname",
                 "lastname");
-        //when
-        boolean verifyRequest = userValidatorServiceImpl.verifyRegistrationRequest(registrationRequest);
 
+        //when
         //then
-        assertThat(verifyRequest).isTrue();
+
+        assertDoesNotThrow(() -> {
+            userValidatorServiceImpl.verifyRegistrationRequestOrThrow(registrationRequest);
+        });
     }
 
 }

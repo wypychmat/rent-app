@@ -1,10 +1,11 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.util.Constant;
-import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.dto.UserDto;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidConfirmationTokenException;
-import com.wypychmat.rentals.rentapp.app.core.exception.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
+import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
 import com.wypychmat.rentals.rentapp.app.core.model.builder.AppUserBuilder;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
@@ -39,11 +40,27 @@ public abstract class RegistrationService {
 
     public abstract UserDto confirmToken(String token);
 
-    protected boolean isRequestValid(RegistrationRequest registrationRequest) {
-        return userValidatorService.verifyRegistrationRequest(registrationRequest);
+    public abstract Optional<UserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest);
+
+
+    protected Optional<UserDto> attemptRefreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+
+        userValidatorService.verifyRefreshConfirmationTokenRequestOrThrow(refreshConfirmTokenRequest);
+
+        Optional<User> optionalUser = registerUserDao.getUserWhenUserExistByUsernameAndEmail(refreshConfirmTokenRequest);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (!user.isEnabled()) {
+                return attemptToSaveRegistrationToken(user);
+            } else {
+                throw new InvalidConfirmationTokenException("Already Confirmed", HttpStatus.NOT_FOUND);
+            }
+        }
+        throw new InvalidConfirmationTokenException("User Not EXIST", HttpStatus.NOT_FOUND);
     }
 
     protected Optional<UserDto> attemptRegistration(RegistrationRequest registrationRequest) {
+        userValidatorService.verifyRegistrationRequestOrThrow(registrationRequest);
         if (checkUserNotExist(registrationRequest)) {
             Optional<User> user = registerUserDao.saveUser(createUserFromRequest(registrationRequest));
             if (user.isPresent()) {
@@ -74,7 +91,7 @@ public abstract class RegistrationService {
     protected UserDto attemptTokenConfirmation(String token) {
         Optional<RegisterToken> registerToken = registerUserDao.findToken(token);
         if (registerToken.isPresent()) {
-           return proceedOnConfirmationToken(registerToken.get());
+            return proceedOnConfirmationToken(registerToken.get());
         } else {
             throw new InvalidConfirmationTokenException("Invalid Registration Token", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -83,7 +100,7 @@ public abstract class RegistrationService {
     private UserDto proceedOnConfirmationToken(RegisterToken registerToken) {
         checkIsTokenAlreadyConfirmed(registerToken);
         checkIsTokenNotExpired(registerToken);
-       return enableUser(registerToken);
+        return enableUser(registerToken);
     }
 
     private UserDto enableUser(RegisterToken registerToken) {
@@ -93,7 +110,12 @@ public abstract class RegistrationService {
         Long userId = user.getId();
         registerUserDao.saveToken(registerToken);
         registerUserDao.enableUserById(userId);
+        deleteAllOtherConfirmationTokenForUser(registerToken, userId);
         return new UserDto(userId, user.getUsername(), user.getEmail());
+    }
+
+    private void deleteAllOtherConfirmationTokenForUser(RegisterToken registerToken, long userId) {
+        registerUserDao.deleteTokenExpectGiven(registerToken, userId);
     }
 
     private void checkIsTokenNotExpired(RegisterToken registerToken) {

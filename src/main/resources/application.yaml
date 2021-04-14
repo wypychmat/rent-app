@@ -35,9 +35,11 @@ api:
     prefix: v
     newest: v1
   path:
-    register: register
-    confirm: confirm
-    login: login/
+    register:
+      base: register
+      confirm: confirm
+      refresh: refresh
+    login: login
   param:
     register:
       token: token
