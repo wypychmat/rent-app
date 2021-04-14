@@ -28,13 +28,11 @@ public class RegisterControllerV1 {
 
     @PostMapping
     public ResponseEntity<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
-
         return getRegistrationResponse(registrationService.registerUser(registrationRequest),
                 HttpStatus.CREATED);
     }
 
     private ResponseEntity<RegistrationResponse> getRegistrationResponse(Optional<UserDto> user, HttpStatus status) {
-
         return user.map(item -> ResponseEntity.status(status)
                 .body(messageProvider.getRegistrationResponse(item,status)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
@@ -53,5 +51,11 @@ public class RegisterControllerV1 {
 
         return getRegistrationResponse(registrationService.refreshTokenForUser(refreshConfirmTokenRequest),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/" + "${api.path.register.refresh}" + "/xd")
+    public ResponseEntity<?> ok(
+            @RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

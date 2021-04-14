@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -20,6 +21,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 // TODO: 13.04.2021 add message from properties
@@ -44,41 +48,55 @@ class LoginService {
             loginRequestVerifier.validateLoginRequest(loginRequest);
             return loginRequest;
         } catch (UnrecognizedPropertyException e) {
-            String propertyName = e.getPropertyName();
-            String knowProperties = e.getKnownPropertyIds().stream().map(Object::toString)
-                    .reduce("", (previous, next) ->
-                            previous.equals("") ? next : previous + ", " + next
-                    );
-            HashMap<String, String> errors = new HashMap<>();
-            errors.put("unknownProperty", propertyName);
-            errors.put("knowProperties", knowProperties);
-            throw new BadRequestAuthException(HttpStatus.BAD_REQUEST.getReasonPhrase(), errors);
+            throw new BadRequestAuthException(
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    getErrorsForUnrecognizedPayload(e));
         } catch (IOException e) {
             e.printStackTrace();
             throw new BadRequestAuthException("Unrecognized payload!");
         }
     }
 
+    private Map<String, String> getErrorsForUnrecognizedPayload(UnrecognizedPropertyException e) throws BadRequestAuthException {
+        String propertyName = e.getPropertyName();
+        String knowProperties = e.getKnownPropertyIds().stream().map(Object::toString)
+                .reduce("", (previous, next) ->
+                        previous.equals("") ? next : previous + ", " + next
+                );
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("unknownProperty", propertyName);
+        errors.put("knowProperties", knowProperties);
+        return errors;
+    }
+
     AuthenticationSuccessHandler getAuthenticationSuccessHandler() {
-        return (rq, rs, a) -> {
+        return (rq, rs, auth) -> {
             JwtConfig jwtConfig = dependency.getJwtConfig();
             LocalDateTime localDateTime = LocalDateTime.now();
             Date nowDate = Date.from(localDateTime.atZone(zoneId).toInstant());
             Date expiresAt = Date.from(localDateTime.plusMinutes(jwtConfig.getExpirationInMin())
                     .atZone(zoneId).toInstant());
-            String[] authorities = a.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toArray(String[]::new);
-            String token = JWT.create().withIssuer(a.getName())
-                    .withArrayClaim(jwtConfig.getAuthorities(), authorities)
-                    .withIssuedAt(nowDate)
-                    .withExpiresAt(expiresAt)
-                    .sign(dependency.getAlgorithm());
+            String token = getToken(auth, nowDate, expiresAt);
             createResponse(rs, new LoginOkResponse(HttpStatus.OK,
                     nowDate,
                     expiresAt,
                     jwtConfig.getPrefix() + token));
         };
+    }
+
+    private String getToken(Authentication auth, Date nowDate, Date expiresAt) {
+        return JWT.create().withIssuer(auth.getName())
+                .withClaim(dependency.getJwtConfig().getAuthorities(), getAuthorities(auth))
+                .withIssuedAt(nowDate)
+                .withExpiresAt(expiresAt)
+                .sign(dependency.getAlgorithm());
+    }
+
+    private List<String> getAuthorities(Authentication auth) {
+        return auth.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
     }
 
     AuthenticationFailureHandler getAuthenticationFailureHandler() {

@@ -2,7 +2,6 @@ package com.wypychmat.rentals.rentapp.app.core.security;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
-import org.springframework.context.MessageSource;
 
 class AuthFilterDependency {
     private final MessageProviderCenter messageProviderCenter;
