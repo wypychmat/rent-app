@@ -3,6 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.model.user;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class RegisterToken {
@@ -91,5 +92,18 @@ public class RegisterToken {
 
     public void setConfirmedAt(LocalDateTime confirmedAt) {
         this.confirmedAt = confirmedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegisterToken that = (RegisterToken) o;
+        return isConfirmed == that.isConfirmed && Objects.equals(id, that.id) && Objects.equals(token, that.token) && Objects.equals(epochCreatedAt, that.epochCreatedAt) && Objects.equals(epochExpiredAt, that.epochExpiredAt) && Objects.equals(confirmedAt, that.confirmedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, token, epochCreatedAt, epochExpiredAt, isConfirmed, confirmedAt);
     }
 }

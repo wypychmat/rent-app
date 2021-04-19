@@ -1,6 +1,5 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,10 +32,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void enableUserById(@Param("id") Long id);
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
-
-
-    @Query(value = "SELECT u.id as id FROM User u WHERE u.username = :username AND u.email = :email")
-    Optional<Long> getUserIdWhenUserExistByUsernameAndEmail(String username, String email);
 
 
 }
