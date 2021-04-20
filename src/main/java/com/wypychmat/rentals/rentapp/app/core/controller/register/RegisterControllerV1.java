@@ -52,10 +52,4 @@ public class RegisterControllerV1 {
         return getRegistrationResponse(registrationService.refreshTokenForUser(refreshConfirmTokenRequest),
                 HttpStatus.OK);
     }
-
-    @PostMapping(path = "/" + "${api.path.register.refresh}" + "/xd")
-    public ResponseEntity<?> ok(
-            @RequestBody RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 }

@@ -1,5 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
+import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithFlatRole;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,6 +34,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void enableUserById(@Param("id") Long id);
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
+
+    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true)
+    List<UserWithFlatRole> getUserWithFlatRole();
 
 
 }
