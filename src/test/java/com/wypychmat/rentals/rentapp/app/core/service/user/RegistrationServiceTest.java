@@ -24,7 +24,6 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
     private static RegistrationService registrationServiceWithoutEmailSending;
     private static RegisterUserDao registerUserDao;
     private static AtomicInteger userSpecific;
-
     private static final SimpleEmailMessageService emailService = mock(SimpleEmailMessageService.class);
 
 
@@ -55,7 +54,7 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
         //then
         assertThat(user).isPresent();
 
-        verify(emailService, times(1))
+        verify(emailService, atLeastOnce())
                 .sendEmail(new RegistrationMessagePayload(username, username + EMAIL_COM, any()));
     }
 

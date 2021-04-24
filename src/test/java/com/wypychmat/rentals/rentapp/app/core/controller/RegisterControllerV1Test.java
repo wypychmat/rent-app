@@ -30,7 +30,7 @@ class RegisterControllerV1Test extends TestContainerBaseWithEmail {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
 
-        ResponseEntity<Object> response = this.testRestTemplate.postForEntity("/api/register/v1", request, Object.class);
+        ResponseEntity<Object> response = this.testRestTemplate.postForEntity("/api/register", request, Object.class);
 
         assertEquals(201, response.getStatusCodeValue());
 
