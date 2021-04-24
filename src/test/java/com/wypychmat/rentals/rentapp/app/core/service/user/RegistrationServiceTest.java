@@ -4,6 +4,7 @@ import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.SimpleEmailMessageService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,13 +32,15 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
     @BeforeAll
     static void setUp(@Autowired UserValidatorService userValidatorService,
                       @Autowired RegisterUserDao registerUserDao,
-                      @Autowired MessageSource messageSource) {
+                      @Autowired MessageSource messageSource,
+                      @Autowired RegistrationMapper registrationMapper) {
         RegistrationServiceTest.registerUserDao = registerUserDao;
         userSpecific = new AtomicInteger(0);
         registrationServiceWithoutEmailSending = new RegistrationServiceTestImplementation(userValidatorService,
                 registerUserDao,
                 emailService,
-                messageSource);
+                messageSource,
+                registrationMapper);
     }
 
 

@@ -1,5 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
+import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ class RegistrationServiceDev extends RegistrationServiceBase {
     public RegistrationServiceDev(UserValidatorService userValidatorService,
                                   RegisterUserDao registerUserDao,
                                   @MailService EmailService emailService,
-                                  MessageSource messageSource) {
-        super(userValidatorService, registerUserDao, emailService, messageSource);
+                                  MessageSource messageSource, RegistrationMapper registrationMapper) {
+        super(userValidatorService, registerUserDao, emailService, messageSource,registrationMapper);
     }
 }
