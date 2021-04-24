@@ -1,11 +1,11 @@
 package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
 
-public class UserDto {
+public class RegistrationUserDto {
     private Long id;
     private String username;
     private String email;
 
-    public UserDto(Long id, String username, String email) {
+    public RegistrationUserDto(Long id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;

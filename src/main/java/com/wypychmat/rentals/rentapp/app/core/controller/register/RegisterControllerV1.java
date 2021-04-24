@@ -4,7 +4,7 @@ package com.wypychmat.rentals.rentapp.app.core.controller.register;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
 import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
@@ -32,7 +32,7 @@ public class RegisterControllerV1 {
                 HttpStatus.CREATED);
     }
 
-    private ResponseEntity<RegistrationResponse> getRegistrationResponse(Optional<UserDto> user, HttpStatus status) {
+    private ResponseEntity<RegistrationResponse> getRegistrationResponse(Optional<RegistrationUserDto> user, HttpStatus status) {
         return user.map(item -> ResponseEntity.status(status)
                 .body(messageProvider.getRegistrationResponse(item,status)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
@@ -41,8 +41,8 @@ public class RegisterControllerV1 {
     @GetMapping(value = "/v1/" + "${api.path.register.confirm}", consumes = {ApiVersion.ANY})
     public ResponseEntity<RegistrationResponse> confirm(@RequestParam("${api.param.register.token}") String token) {
 
-        UserDto userDto = registrationService.confirmToken(token);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(messageProvider.getConfirmationResponse(userDto));
+        RegistrationUserDto registrationUserDto = registrationService.confirmToken(token);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(messageProvider.getConfirmationResponse(registrationUserDto));
     }
 
     @PostMapping(path = "/" + "${api.path.register.refresh}")
