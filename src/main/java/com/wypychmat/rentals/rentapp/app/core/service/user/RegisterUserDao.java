@@ -12,7 +12,7 @@ interface RegisterUserDao {
 
     Optional<UsernameEmail> existByUsernameAndEmail(String username, String email) throws InvalidUserRequestException;
 
-    Optional<User> saveUser(User user);
+    User registerUser(User user, RegisterToken registerToken);
 
     Optional<RegisterToken> saveToken(RegisterToken registerToken);
 

@@ -2,8 +2,9 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
+import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -18,17 +19,18 @@ abstract class RegistrationServiceBase extends RegistrationService {
     public RegistrationServiceBase(UserValidatorService userValidatorService,
                                    RegisterUserDao registerUserDao,
                                    EmailService emailService,
-                                   MessageSource messageSource) {
-        super(userValidatorService, registerUserDao, emailService, messageSource);
+                                   MessageSource messageSource,
+                                   RegistrationMapper registrationMapper) {
+        super(userValidatorService, registerUserDao, emailService, messageSource,registrationMapper);
     }
 
     @Override
-    public Optional<UserDto> registerUser(RegistrationRequest registrationRequest) {
+    public Optional<RegistrationUserDto> registerUser(RegistrationRequest registrationRequest) {
         return attemptRegistration(registrationRequest);
     }
 
     @Override
-    public UserDto confirmToken(String token) {
+    public RegistrationUserDto confirmToken(String token) {
         if (token != null && !token.trim().equals("")) {
             return attemptTokenConfirmation(token);
         } else {
@@ -37,7 +39,7 @@ abstract class RegistrationServiceBase extends RegistrationService {
     }
 
     @Override
-    public Optional<UserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
+    public Optional<RegistrationUserDto> refreshTokenForUser(RefreshConfirmTokenRequest refreshConfirmTokenRequest) {
         return attemptRefreshTokenForUser(refreshConfirmTokenRequest);
     }
 }

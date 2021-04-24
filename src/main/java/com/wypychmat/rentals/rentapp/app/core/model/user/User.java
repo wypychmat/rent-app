@@ -1,5 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.model.user;
 
+import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithFlatRole;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -7,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.*;
 
-@Entity()
+@Entity
 @NamedQueries({
         @NamedQuery(name = "User.existByUsername",
                 query = "SELECT (COUNT(u)> 0) FROM User u WHERE u.username=:username"),
@@ -16,6 +18,26 @@ import java.util.*;
         @NamedQuery(name = "User.enableUserById",
                 query = "UPDATE User u SET u.isEnabled = 1 WHERE  u.id=:id")
 })
+
+@SqlResultSetMapping(
+        name = "userWithFlatRole",
+        classes = {
+                @ConstructorResult(
+                        targetClass = UserWithFlatRole.class,
+                        columns = {
+                                @ColumnResult(name = "username", type = String.class),
+                                @ColumnResult(name = "roles", type = String.class),
+                                @ColumnResult(name = "email", type = String.class),
+                                @ColumnResult(name = "enabled", type = Boolean.class)
+                        })})
+
+@NamedNativeQuery(name = "User.getUserWithFlatRoles", query = "SELECT username, " +
+        "(SELECT GROUP_CONCAT(CONCAT(role.role_name)) " +
+        "FROM role LEFT JOIN user_roles as ur ON (user.id = ur.user_id) " +
+        "WHERE role.id = ur.role_id GROUP BY (user.id)) as roles," +
+        " email, is_enabled as enabled FROM user",
+        resultSetMapping = "userWithFlatRole",
+        resultClass = UserWithFlatRole.class)
 public class User {
 
     @Id

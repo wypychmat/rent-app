@@ -2,7 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.internationalization.registration
 
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import org.springframework.context.MessageSource;
@@ -18,7 +18,7 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
         super(messageSource);
     }
 
-    public RegistrationResponse getRegistrationResponse(UserDto user,HttpStatus status) {
+    public RegistrationResponse getRegistrationResponse(RegistrationUserDto user, HttpStatus status) {
         return getResponse("register.wait.for.email",
                 user.getEmail(),
                 status,
@@ -37,7 +37,7 @@ public class RegistrationMessageProvider extends MessageProviderCenter {
                 message);
     }
 
-    public RegistrationResponse getConfirmationResponse(UserDto user) {
+    public RegistrationResponse getConfirmationResponse(RegistrationUserDto user) {
         return getResponse("register.confirmed",
                 user.getUsername(),
                 HttpStatus.ACCEPTED,

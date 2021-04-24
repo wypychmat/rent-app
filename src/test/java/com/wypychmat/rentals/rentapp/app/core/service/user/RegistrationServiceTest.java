@@ -2,8 +2,9 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
 import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.UserDto;
+import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
+import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.SimpleEmailMessageService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,13 +32,15 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
     @BeforeAll
     static void setUp(@Autowired UserValidatorService userValidatorService,
                       @Autowired RegisterUserDao registerUserDao,
-                      @Autowired MessageSource messageSource) {
+                      @Autowired MessageSource messageSource,
+                      @Autowired RegistrationMapper registrationMapper) {
         RegistrationServiceTest.registerUserDao = registerUserDao;
         userSpecific = new AtomicInteger(0);
         registrationServiceWithoutEmailSending = new RegistrationServiceTestImplementation(userValidatorService,
                 registerUserDao,
                 emailService,
-                messageSource);
+                messageSource,
+                registrationMapper);
     }
 
 
@@ -48,7 +51,7 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
         RegistrationRequest registrationRequest = getValidRegistrationRequest(username, username);
         //when
         registerUserDao.deleteUserByUsername(username);
-        Optional<UserDto> user = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
+        Optional<RegistrationUserDto> user = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
         //then
         assertThat(user).isPresent();
 
@@ -65,7 +68,7 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(username, username);
 
-        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
+        Optional<RegistrationUserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(registrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
@@ -83,7 +86,7 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(secondUsername, firstUsername);
         //when then
-        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
+        Optional<RegistrationUserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)
@@ -102,7 +105,7 @@ class RegistrationServiceTest extends TestContainerBaseWithEmail {
 
         RegistrationRequest secondRegistrationRequest = getValidRegistrationRequest(firstUsername, secondUsername);
         //when then
-        Optional<UserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
+        Optional<RegistrationUserDto> firstResult = registrationServiceWithoutEmailSending.registerUser(firstRegistrationRequest);
 
         assertThat(firstResult).isPresent();
         assertThatExceptionOfType(InvalidUserRequestException.class)

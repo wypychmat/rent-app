@@ -4,7 +4,6 @@ import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshCon
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
-import com.wypychmat.rentals.rentapp.app.core.model.user.Role;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import com.wypychmat.rentals.rentapp.app.core.model.user.ApplicationMainRole;
 import com.wypychmat.rentals.rentapp.app.core.repository.RegisterTokenRepository;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,30 +41,19 @@ class RegisterUserDaoImpl implements RegisterUserDao {
 
     @Override
     @Transactional
-    public Optional<User> saveUser(User user) {
-        try {
-            Optional<Role> userRole = roleRepository.findByRoleName(ApplicationMainRole.USER.name());
-            if (userRole.isPresent()) {
-                HashSet<Role> roles = new HashSet<>();
-                Role role = userRole.get();
-                roles.add(role);
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                user.setUserRoles(roles);
-                User save = userRepository.save(user);
-                return Optional.of(save);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+    public User registerUser(User user, RegisterToken registerToken) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.addRoles(roleRepository.findByRoleName(ApplicationMainRole.USER.name()));
+        userRepository.save(user);
+        registerTokenRepository.save(registerToken);
+        return user;
     }
 
-    @Transactional
+
     @Override
     public Optional<RegisterToken> saveToken(RegisterToken registerToken) {
         try {
-            RegisterToken save = registerTokenRepository.save(registerToken);
-            return Optional.of(save);
+            return Optional.of(registerTokenRepository.save(registerToken));
         } catch (Exception e) {
             e.printStackTrace();
         }

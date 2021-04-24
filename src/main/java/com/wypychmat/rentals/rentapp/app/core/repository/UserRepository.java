@@ -1,7 +1,10 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
+import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithFlatRole;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,6 +36,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void enableUserById(@Param("id") Long id);
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
+
+    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true,countQuery = "SELECT COUNT(id) FROM user")
+    Page<UserWithFlatRole> getUserWithFlatRole(Pageable pageable);
 
 
 }

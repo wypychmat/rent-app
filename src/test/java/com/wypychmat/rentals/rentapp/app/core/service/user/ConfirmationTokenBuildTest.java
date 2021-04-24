@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-class ConfirmationTokenBuilderTest {
+class ConfirmationTokenBuildTest {
 
 
     @Test
