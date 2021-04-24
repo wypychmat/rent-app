@@ -1,12 +1,14 @@
-package com.wypychmat.rentals.rentapp.app.core.controller;
+package com.wypychmat.rentals.rentapp.app.core.util.page;
 
+
+import java.lang.reflect.Constructor;
 
 public class PageParam {
     private final int page;
     private final int size;
     private final String[] orders;
 
-    protected PageParam(int page, int size, String[] orders) {
+    PageParam(int page, int size, String[] orders) {
         this.page = page;
         this.size = size;
         this.orders = orders;
@@ -24,26 +26,58 @@ public class PageParam {
         return orders;
     }
 
-    public static BuilderP pageParamBuilder() {
-        return new BuilderP();
+
+    public static <T extends AbstractBuilder<T>> T builder(Class<T> builderClass) {
+        try {
+            Constructor<?> constructor = builderClass.getDeclaredConstructors()[0];
+            constructor.setAccessible(true);
+            return builderClass.cast(constructor.newInstance());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        throw new PageBuilderException("CANNOT CAST TYPE BUILDER");
     }
 
-    public static class BuilderP extends PageParamBuilder<BuilderP> {
 
-        public BuilderP() {
+    static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+        int page;
+        int size;
+        String[] orders;
+
+        AbstractBuilder() {
         }
 
+        public T setPage(int page) {
+            this.page = page;
+            return returnThis();
+        }
+
+        public T setSize(int size) {
+            this.size = size;
+            return returnThis();
+        }
+
+        public T setOrders(String[] orders) {
+            this.orders = orders;
+            return returnThis();
+        }
+
+        abstract T returnThis();
+
+    }
+
+    public static class Builder extends AbstractBuilder<Builder> {
+
         @Override
-        public BuilderP returnThis() {
+        Builder returnThis() {
             return this;
         }
 
-        PageParam build() {
+        public PageParam build() {
             return new PageParam(page, size, orders);
         }
+
     }
-
-
 }
 
 

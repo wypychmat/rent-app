@@ -40,6 +40,7 @@ api:
       confirm: confirm
       refresh: refresh
     login: login
+    users: users
   param:
     register:
       token: token

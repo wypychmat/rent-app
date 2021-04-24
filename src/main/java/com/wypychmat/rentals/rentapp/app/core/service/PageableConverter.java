@@ -1,23 +1,24 @@
 package com.wypychmat.rentals.rentapp.app.core.service;
 
 
+import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class PageableCreatorService {
+public class PageableConverter {
 
 
-    public Pageable getPageableFromParam(int page, int size, String[] orders) {
-        return PageRequest.of(page, size, Sort.by(getSortsWithOrderIgnoringCase(orders)));
+    public Pageable getPageableFromParam(PageParam pageParam) {
+        return PageRequest.of(
+                pageParam.getPage(),
+                pageParam.getSize(),
+                Sort.by(getSortsWithOrderIgnoringCase(pageParam.getOrders())));
     }
-
 
     private List<Sort.Order> getSortsWithOrderIgnoringCase(String[] requestSorts) {
         return Arrays.stream(requestSorts).map(singleSort -> {
@@ -28,7 +29,6 @@ public class PageableCreatorService {
             return new Sort.Order(getDirection(Sort.Direction.ASC.name()), singleSort).ignoreCase();
         }).collect(Collectors.toList());
     }
-
 
     private Sort.Direction getDirection(String direction) {
         direction = direction.toLowerCase();

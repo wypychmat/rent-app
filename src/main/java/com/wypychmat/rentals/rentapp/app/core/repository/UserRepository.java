@@ -37,8 +37,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
 
-    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true)
-    List<UserWithFlatRole> getUserWithFlatRole();
+    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true,countQuery = "SELECT COUNT(id) FROM user")
+    Page<UserWithFlatRole> getUserWithFlatRole(Pageable pageable);
 
 
 }
