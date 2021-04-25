@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsersManipulationServiceImpl implements UsersManipulationService {
 
@@ -23,5 +25,10 @@ public class UsersManipulationServiceImpl implements UsersManipulationService {
     public Page<UserWithFlatRole> getAllUsers(PageParamUsername pageParamUsername) {
         Pageable pageable = pageableConverter.getPageableFromParam(pageParamUsername);
         return userRepository.getUserWithFlatRole(pageable);
+    }
+
+    @Override
+    public List<Object> getFlat() {
+        return userRepository.getFlat();
     }
 }

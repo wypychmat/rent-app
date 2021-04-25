@@ -37,8 +37,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
 
-    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true,countQuery = "SELECT COUNT(id) FROM user")
+    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true, countQuery = "SELECT COUNT(id) FROM user")
     Page<UserWithFlatRole> getUserWithFlatRole(Pageable pageable);
+
+
+    @Query(value = "SELECT username, " +
+            "(SELECT GROUP_CONCAT(CONCAT(role.role_name)) " +
+            "FROM role LEFT JOIN user_roles as ur ON (user.id = ur.user_id) " +
+            "WHERE role.id = ur.role_id GROUP BY (user.id)) as roles," +
+            " email, is_enabled as enabled FROM user", nativeQuery = true)
+    List<Object> getFlat();
 
 
 }
