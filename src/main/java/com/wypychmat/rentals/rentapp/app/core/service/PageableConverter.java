@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.domain.Sort.*;
+
 public class PageableConverter {
 
 
@@ -17,25 +19,25 @@ public class PageableConverter {
         return PageRequest.of(
                 pageParam.getPage(),
                 pageParam.getSize(),
-                Sort.by(getSortsWithOrderIgnoringCase(pageParam.getOrders())));
+                by(getSortsWithOrderIgnoringCase(pageParam.getOrders())));
     }
 
-    private List<Sort.Order> getSortsWithOrderIgnoringCase(String[] requestSorts) {
+    private List<Order> getSortsWithOrderIgnoringCase(String[] requestSorts) {
         return Arrays.stream(requestSorts).map(singleSort -> {
             if (singleSort.contains(".")) {
                 String[] sorts = singleSort.split("\\.");
-                return new Sort.Order(getDirection(sorts[1]), sorts[0]).ignoreCase();
+                return new Order(getDirection(sorts[1]), sorts[0]).ignoreCase();
             }
-            return new Sort.Order(getDirection(Sort.Direction.ASC.name()), singleSort).ignoreCase();
+            return new Order(getDirection(Direction.ASC.name()), singleSort).ignoreCase();
         }).collect(Collectors.toList());
     }
 
-    private Sort.Direction getDirection(String direction) {
+    private Direction getDirection(String direction) {
         direction = direction.toLowerCase();
         if (direction.equals("desc")) {
-            return Sort.Direction.DESC;
+            return Direction.DESC;
         }
-        return Sort.Direction.ASC;
+        return Direction.ASC;
     }
 
 }

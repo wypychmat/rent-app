@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithFlatRole;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.data.domain.Page;
@@ -12,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -37,16 +36,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> getUserByUsernameAndEmail(String username, String email);
 
-    @Query(name = "User.getUserWithFlatRoles", nativeQuery = true, countQuery = "SELECT COUNT(id) FROM user")
-    Page<UserWithFlatRole> getUserWithFlatRole(Pageable pageable);
 
-
-    @Query(value = "SELECT username, " +
-            "(SELECT GROUP_CONCAT(CONCAT(role.role_name)) " +
-            "FROM role LEFT JOIN user_roles as ur ON (user.id = ur.user_id) " +
-            "WHERE role.id = ur.role_id GROUP BY (user.id)) as roles," +
-            " email, is_enabled as enabled FROM user", nativeQuery = true)
-    List<Object> getFlat();
+    @Query(value = "SELECT user.id as id, username as username," +
+            " (SELECT GROUP_CONCAT(CONCAT(role.role_name)) FROM" +
+            " role JOIN user_roles as ur ON (user.id = ur.user_id) WHERE role.id = ur.role_id) as roles," +
+            " email as email, is_enabled as enabled FROM user " +
+            "WHERE username LIKE :username and email LIKE :email AND is_enabled = :enabled",
+            nativeQuery = true, countQuery = "SELECT count(user.id) from user")
+    Page<UserWithRoles> getUserWithRoles(Pageable pageable, String username, String email, boolean enabled);
 
 
 }

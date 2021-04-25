@@ -8,7 +8,7 @@ public class PageParam {
     private final int size;
     private final String[] orders;
 
-    PageParam(int page, int size, String[] orders) {
+  protected  PageParam(int page, int size, String[] orders) {
         this.page = page;
         this.size = size;
         this.orders = orders;
@@ -39,12 +39,12 @@ public class PageParam {
     }
 
 
-    static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
-        int page;
-        int size;
-        String[] orders;
+   protected static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+       protected int page;
+       protected int size;
+       protected String[] orders;
 
-        AbstractBuilder() {
+       protected AbstractBuilder() {
         }
 
         public T setPage(int page) {
@@ -62,14 +62,14 @@ public class PageParam {
             return returnThis();
         }
 
-        abstract T returnThis();
+       protected abstract T returnThis();
 
     }
 
     public static class Builder extends AbstractBuilder<Builder> {
 
         @Override
-        Builder returnThis() {
+        protected Builder returnThis() {
             return this;
         }
 

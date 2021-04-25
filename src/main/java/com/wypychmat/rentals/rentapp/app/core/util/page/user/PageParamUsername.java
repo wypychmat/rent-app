@@ -1,4 +1,6 @@
-package com.wypychmat.rentals.rentapp.app.core.util.page;
+package com.wypychmat.rentals.rentapp.app.core.util.page.user;
+
+import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
 
 public class PageParamUsername extends PageParam {
     private final String username;
@@ -17,7 +19,7 @@ public class PageParamUsername extends PageParam {
         String username;
 
         public T setUsername(String username) {
-            this.username = username;
+            this.username = username.trim();
             return returnThis();
         }
     }
@@ -25,7 +27,7 @@ public class PageParamUsername extends PageParam {
     public static class Builder extends AbstractBuilder<Builder> {
 
         @Override
-        Builder returnThis() {
+       protected Builder returnThis() {
             return this;
         }
 

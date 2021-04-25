@@ -1,14 +1,12 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithFlatRole;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import com.wypychmat.rentals.rentapp.app.core.service.PageableConverter;
-import com.wypychmat.rentals.rentapp.app.core.util.page.PageParamUsername;
+import com.wypychmat.rentals.rentapp.app.core.util.page.user.PageParamUsernameEmailEnabled;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UsersManipulationServiceImpl implements UsersManipulationService {
@@ -22,13 +20,17 @@ public class UsersManipulationServiceImpl implements UsersManipulationService {
     }
 
     @Override
-    public Page<UserWithFlatRole> getAllUsers(PageParamUsername pageParamUsername) {
-        Pageable pageable = pageableConverter.getPageableFromParam(pageParamUsername);
-        return userRepository.getUserWithFlatRole(pageable);
+    public Page<UserWithRoles> getAllUsers(PageParamUsernameEmailEnabled pageParam) {
+        Pageable pageable = pageableConverter.getPageableFromParam(pageParam);
+        return userRepository.getUserWithRoles(pageable,
+                getContaining(pageParam.getUsername()),
+                getContaining(pageParam.getEmail()),
+                pageParam.isEnabled());
     }
 
-    @Override
-    public List<Object> getFlat() {
-        return userRepository.getFlat();
+    private String getContaining(String param) {
+        return "%" + param + "%";
     }
+
+
 }
