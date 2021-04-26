@@ -8,6 +8,4 @@ public interface UsersManipulationService {
 
     Page<UserWithRoles> getAllUsers(PageParamUsernameEmailEnabled pageParamUsername);
 
-
-
 }

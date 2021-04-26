@@ -1,11 +1,9 @@
 package com.wypychmat.rentals.rentapp.app.core.controller.user;
 
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
-import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import com.wypychmat.rentals.rentapp.app.core.service.user.UsersManipulationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
-import com.wypychmat.rentals.rentapp.app.core.util.page.user.PageParamUsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.util.page.user.PageParamUsernameEmailEnabled;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -23,15 +21,14 @@ public class UserControllerV1 {
         this.usersManipulationService = usersManipulationService;
     }
 
-
-    @GetMapping("/a")
+    @GetMapping
     @PostAuthorize("hasRole('ADMIN')")
-    public Page<UserWithRoles> getUsername(
+    public Page<UserWithRoles> getUsers(
             @RequestParam(defaultValue = "") String username,
             @RequestParam(defaultValue = "") String email,
-            @RequestParam(defaultValue = "true") boolean enabled,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "true") String enabled,
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "10") String size,
             @RequestParam(defaultValue = "id.asc", name = "sort") String[] orders) {
 
         return usersManipulationService.getAllUsers(

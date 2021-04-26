@@ -3,7 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.util.page.user;
 public class PageParamUsernameEmail extends PageParamUsername {
     private final String email;
 
-    PageParamUsernameEmail(int page, int size, String[] orders, String username, String email) {
+    PageParamUsernameEmail(String page, String size, String[] orders, String username, String email) {
         super(page, size, orders, username);
         this.email = email;
     }

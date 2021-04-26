@@ -5,7 +5,7 @@ import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
 public class PageParamUsername extends PageParam {
     private final String username;
 
-    PageParamUsername(int page, int size, String[] orders, String username) {
+    PageParamUsername(String page, String size, String[] orders, String username) {
         super(page, size, orders);
         this.username = username;
     }

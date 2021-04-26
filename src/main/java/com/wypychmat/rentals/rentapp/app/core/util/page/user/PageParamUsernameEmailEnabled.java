@@ -1,22 +1,22 @@
 package com.wypychmat.rentals.rentapp.app.core.util.page.user;
 
 public class PageParamUsernameEmailEnabled extends PageParamUsernameEmail {
-    private final boolean enabled;
+    private final String enabled;
 
-    PageParamUsernameEmailEnabled(int page, int size, String[] orders, String username, String email, boolean enabled) {
+    PageParamUsernameEmailEnabled(String page, String size, String[] orders, String username, String email, String enabled) {
         super(page, size, orders, username, email);
         this.enabled = enabled;
     }
 
-    public boolean isEnabled() {
+    public String isEnabled() {
         return enabled;
     }
 
 
     static abstract class AbstractBuilder<T extends AbstractBuilder<T>> extends PageParamUsernameEmail.AbstractBuilder<T> {
-        boolean enabled;
+        String enabled;
 
-        public T setEnabled(boolean enabled) {
+        public T setEnabled(String enabled) {
             this.enabled = enabled;
             return returnThis();
         }

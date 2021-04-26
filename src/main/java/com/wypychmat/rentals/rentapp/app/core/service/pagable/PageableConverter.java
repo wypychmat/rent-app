@@ -1,24 +1,34 @@
-package com.wypychmat.rentals.rentapp.app.core.service;
+package com.wypychmat.rentals.rentapp.app.core.service.pagable;
 
 
 import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.validation.Validator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.*;
 
+@Service
 public class PageableConverter {
+
+    private final PageableValidatorService pageableValidatorService;
+
+    public PageableConverter(Validator validator) {
+        this.pageableValidatorService = new PageableValidatorService(validator);
+    }
 
 
     public Pageable getPageableFromParam(PageParam pageParam) {
+        pageableValidatorService.validatePageRequestOrThrow(pageParam);
         return PageRequest.of(
-                pageParam.getPage(),
-                pageParam.getSize(),
+                Integer.parseInt(pageParam.getPage()),
+                Integer.parseInt(pageParam.getSize()),
                 by(getSortsWithOrderIgnoringCase(pageParam.getOrders())));
     }
 

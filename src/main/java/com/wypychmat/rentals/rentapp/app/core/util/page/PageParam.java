@@ -1,24 +1,32 @@
 package com.wypychmat.rentals.rentapp.app.core.util.page;
 
 
+import com.wypychmat.rentals.rentapp.app.core.validation.pagable.ValidPage;
+import com.wypychmat.rentals.rentapp.app.core.validation.pagable.ValidPageSize;
+import com.wypychmat.rentals.rentapp.app.core.validation.pagable.ValidSort;
+
 import java.lang.reflect.Constructor;
 
 public class PageParam {
-    private final int page;
-    private final int size;
+
+    @ValidPage
+    private final String page;
+    @ValidPageSize
+    private final String size;
+    @ValidSort
     private final String[] orders;
 
-  protected  PageParam(int page, int size, String[] orders) {
+    protected PageParam(String page, String size, String[] orders) {
         this.page = page;
         this.size = size;
         this.orders = orders;
     }
 
-    public int getPage() {
+    public String getPage() {
         return page;
     }
 
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 
@@ -39,20 +47,20 @@ public class PageParam {
     }
 
 
-   protected static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
-       protected int page;
-       protected int size;
-       protected String[] orders;
+    protected static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+        protected String page;
+        protected String size;
+        protected String[] orders;
 
-       protected AbstractBuilder() {
+        protected AbstractBuilder() {
         }
 
-        public T setPage(int page) {
+        public T setPage(String page) {
             this.page = page;
             return returnThis();
         }
 
-        public T setSize(int size) {
+        public T setSize(String size) {
             this.size = size;
             return returnThis();
         }
@@ -62,7 +70,7 @@ public class PageParam {
             return returnThis();
         }
 
-       protected abstract T returnThis();
+        protected abstract T returnThis();
 
     }
 
