@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.controller.register.dto;
+package com.wypychmat.rentals.rentapp.app.core.dto.registration;
 
 public class RegistrationUserDto {
     private Long id;

@@ -4,7 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
-@Entity(name = "role")
+@Entity(name = "Role")
+@Table(name = "role")
 public class Role {
 
     @Id
