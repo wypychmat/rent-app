@@ -41,6 +41,7 @@ api:
       refresh: refresh
     login: login
     users: users
+    vehicles: vehicles
   param:
     register:
       token: token
