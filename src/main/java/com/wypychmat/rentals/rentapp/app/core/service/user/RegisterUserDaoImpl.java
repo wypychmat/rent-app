@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;

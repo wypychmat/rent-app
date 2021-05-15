@@ -1,10 +1,10 @@
-package com.wypychmat.rentals.rentapp.app.core.controller.register;
+package com.wypychmat.rentals.rentapp.app.core.controller;
 
 
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RefreshConfirmTokenRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
 import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;

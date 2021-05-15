@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.internationalization.registration;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationResponse;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
 import org.springframework.context.MessageSource;

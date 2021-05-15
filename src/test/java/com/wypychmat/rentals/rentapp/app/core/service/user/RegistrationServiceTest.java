@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.TestContainerBaseWithEmail;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationUserDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.SimpleEmailMessageService;

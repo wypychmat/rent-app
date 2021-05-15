@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.validation.user;
 
-import com.wypychmat.rentals.rentapp.app.core.controller.register.dto.RegistrationRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
