@@ -3,8 +3,7 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -13,39 +12,28 @@ class ConfirmationTokenBuildTest {
 
 
     @Test
-    void shouldConfirmationTokenNeverBeTheSameWhenUserCredentialsAreTheSame() {
+    void shouldConfirmationTokenNeverBeTheSameWhenUserCredentialsAreTheSame() throws InterruptedException, ExecutionException {
+        //given
         String username = "username";
         String email = "email@email.com";
-        int testPerUnit = 5000;
-        int amountOfThreads = 10;
-
-        List<CompletableFuture<Set<String>>>  result = Collections.synchronizedList(new ArrayList<>());
-        for (int i = 0; i < amountOfThreads; i++) {
-            result.add(getResult(username, email, testPerUnit));
-        }
-
+        int amountOfThreads = 5000;
+        ExecutorService executorService = Executors.newFixedThreadPool(amountOfThreads);
         Set<String> finalResult = new HashSet<>();
-        result.forEach(tokens -> {
-            try {
-                finalResult.addAll(tokens.get());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+        List<Callable<String>> threads = new ArrayList<>();
 
-        assertThat(finalResult.size()).isEqualTo(amountOfThreads * testPerUnit);
+        //when
+        for (int i = 0; i < amountOfThreads; i++)
+            threads.add(() -> ConfirmationTokenBuilder.build(username, email));
+        List<Future<String>> futures = executorService.invokeAll(threads);
 
+        for (Future<String> stringFuture : futures) {
+            finalResult.add(stringFuture.get());
+        }
+        executorService.shutdown();
+
+        //then
+        assertThat(finalResult.size()).isEqualTo(amountOfThreads);
     }
 
-    private CompletableFuture<Set<String>> getResult(String username, String email, int testPerUnit) {
-        return CompletableFuture.supplyAsync(() -> {
-            Set<String> tokens = new HashSet<>();
-            for (int i = 0; i < testPerUnit; i++) {
-                String token = ConfirmationTokenBuilder.build(username, email);
-                tokens.add(token);
-            }
-            return tokens;
-        });
-    }
 
 }

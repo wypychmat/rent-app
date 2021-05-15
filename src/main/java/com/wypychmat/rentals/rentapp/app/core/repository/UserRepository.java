@@ -1,6 +1,5 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
-import com.wypychmat.rentals.rentapp.app.core.model.projection.RoleProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UserProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -51,21 +48,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<UserWithRoles> getUserWithRoles(Pageable pageable, String username, String email, boolean enabled);
 
 
-//    Long getId();
-//
-//    String getUsername();
-//
-//    String getEmail();
-//
-//    String getLastName();
-//
-//    String getFirstName();
-//
-//    Boolean getEnabled();
-//
-//    Set<RoleProjection> getRoles();
 
-    @Query(value = "SELECT u.id as id, u.username as username, u.email as email, u.lastName as lastName, u.firstName as firstName, u.isEnabled as enabled FROM User u WHERE u.id = :userId")
+    @Query(value = "SELECT u.id as id," +
+            " u.username as username," +
+            " u.email as email," +
+            " u.lastName as lastName," +
+            " u.firstName as firstName," +
+            " u.isEnabled as enabled" +
+            " FROM User u WHERE u.id = :userId")
     Optional<UserProjection> findUserByIdWithProjection(Long userId);
 
 

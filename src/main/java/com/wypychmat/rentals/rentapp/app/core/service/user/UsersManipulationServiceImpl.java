@@ -20,7 +20,9 @@ public class UsersManipulationServiceImpl implements UsersManipulationService {
     private final UserMapper userMapper;
     private final PageableConverter pageableConverter;
 
-    public UsersManipulationServiceImpl(UserRepository userRepository, UserMapper userMapper, PageableConverter pageableConverter) {
+    public UsersManipulationServiceImpl(UserRepository userRepository,
+                                        UserMapper userMapper,
+                                        PageableConverter pageableConverter) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.pageableConverter = pageableConverter;

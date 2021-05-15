@@ -1,7 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.controller;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.user.UserDto;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.service.user.UsersManipulationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
