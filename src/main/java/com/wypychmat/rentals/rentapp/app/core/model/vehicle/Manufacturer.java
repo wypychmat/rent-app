@@ -15,6 +15,7 @@ public class Manufacturer {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String manufacturer;
 
     @NotBlank

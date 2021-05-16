@@ -17,6 +17,7 @@ public class Vehicle {
     private Integer productionYear;
 
     @NotBlank
+    @Column(unique = true)
     private String registrationPlate;
 
     @NotNull

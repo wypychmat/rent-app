@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,7 +22,7 @@ public class Model {
     private Integer startProductionYear;
 
     @NotBlank
-    @Size(max = 255, min = 10)
+    @Size(max = 255)
     private String description;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -39,9 +40,9 @@ public class Model {
     @NotNull
     private Segment segment;
 
-    @OneToMany
-    @JoinTable(name = "model_engines",  joinColumns =
-    @JoinColumn(name = "model_id" ,referencedColumnName = "id"),
+    @ManyToMany
+    @JoinTable(name = "model_engines", joinColumns =
+    @JoinColumn(name = "model_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "engine_id", referencedColumnName = "id"))
     @NotEmpty
     private final Set<Engine> engines = new HashSet<>();
@@ -52,13 +53,20 @@ public class Model {
     public Model() {
     }
 
-    public Model(String model, Integer startProductionYear, String description, Manufacturer manufacturer, Type type, Segment segment) {
+    public Model(String model,
+                 Integer startProductionYear,
+                 String description,
+                 Manufacturer manufacturer,
+                 Type type,
+                 Segment segment,
+                 List<Engine> engines) {
         this.model = model;
         this.startProductionYear = startProductionYear;
         this.description = description;
         this.manufacturer = manufacturer;
         this.type = type;
         this.segment = segment;
+        this.engines.addAll(engines);
     }
 
     public Long getId() {
@@ -121,7 +129,7 @@ public class Model {
         return engines;
     }
 
-    public void addEngines(Engine... engines){
+    public void addEngines(Engine... engines) {
         this.engines.addAll(Arrays.asList(engines));
     }
 
@@ -129,7 +137,67 @@ public class Model {
         return vehicles;
     }
 
-    public void addVehicles(Vehicle... vehicles){
+    public void addVehicles(Vehicle... vehicles) {
         this.vehicles.addAll(Arrays.asList(vehicles));
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String model;
+        private Integer startProductionYear;
+        private String description;
+        private Manufacturer manufacturer;
+        private Type type;
+        private Segment segment;
+        private List<Engine> engines;
+
+        public Builder setModel(String model) {
+            this.model = model;
+            return this;
+        }
+
+        public Builder setStartProductionYear(Integer startProductionYear) {
+            this.startProductionYear = startProductionYear;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setManufacturer(Manufacturer manufacturer) {
+            this.manufacturer = manufacturer;
+            return this;
+        }
+
+        public Builder setType(Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setSegment(Segment segment) {
+            this.segment = segment;
+            return this;
+        }
+
+        public Builder setEngines(List<Engine> engines) {
+            this.engines = engines;
+            return this;
+        }
+
+        public Model build() {
+            return new Model(
+                    model,
+                    startProductionYear,
+                    description,
+                    manufacturer,
+                    type,
+                    segment,
+                    engines);
+        }
     }
 }
