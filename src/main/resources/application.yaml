@@ -41,7 +41,9 @@ api:
       refresh: refresh
     login: login
     users: users
-    vehicles: vehicles
+    models: models
+    producer: producers
+    engines: engines
   param:
     register:
       token: token
