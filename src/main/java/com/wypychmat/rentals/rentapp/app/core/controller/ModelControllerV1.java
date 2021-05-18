@@ -3,8 +3,10 @@ package com.wypychmat.rentals.rentapp.app.core.controller;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelDto;
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelPropertyDto;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModel;
 import com.wypychmat.rentals.rentapp.app.core.service.vehicle.VehiclesFacade;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.Optional;
+import java.util.List;
 import java.util.function.Supplier;
 
-@Controller
+@RestController
 @RequestMapping(value = "${api.base}" + "${api.path.models}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
 public class ModelControllerV1 {
 
@@ -27,10 +28,10 @@ public class ModelControllerV1 {
     }
 
     @GetMapping("/all")
-    ResponseEntity<?> getAllModel(Pageable pageable) {
-        vehiclesFacade.getAllUniqueModel(pageable);
-        return ResponseEntity.ok().build();
+    Page<ProjectionModel> getAllModel(Pageable pageable) {
+        return vehiclesFacade.getAllModel(pageable);
     }
+
 
     @PostMapping
     @PreAuthorize("hasAuthority('write')")

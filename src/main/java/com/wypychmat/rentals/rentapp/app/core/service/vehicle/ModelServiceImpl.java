@@ -4,13 +4,13 @@ import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelDto;
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelPropertyDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.vehicle.NoSuchModelMembersException;
 import com.wypychmat.rentals.rentapp.app.core.mapper.NewModelMapper;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModel;
 import com.wypychmat.rentals.rentapp.app.core.model.vehicle.*;
 import com.wypychmat.rentals.rentapp.app.core.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
@@ -56,8 +56,8 @@ class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public Page<Model> getAllUniqueModel(Pageable pageable) {
-        return modelRepository.findAll(pageable);
+    public Page<ProjectionModel>  getAllModel(Pageable pageable) {
+        return modelRepository.findAllModels(pageable);
     }
 
 
