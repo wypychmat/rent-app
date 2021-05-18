@@ -56,8 +56,8 @@ class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public Page<ProjectionModel>  getAllModel(Pageable pageable) {
-        return modelRepository.findAllModels(pageable);
+    public Page<ProjectionModel>  getAllModel(Pageable pageable, String model) {
+        return modelRepository.findAllModels(pageable,model);
     }
 
 

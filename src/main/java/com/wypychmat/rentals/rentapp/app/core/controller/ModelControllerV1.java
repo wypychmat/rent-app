@@ -28,8 +28,9 @@ public class ModelControllerV1 {
     }
 
     @GetMapping("/all")
-    Page<ProjectionModel> getAllModel(Pageable pageable) {
-        return vehiclesFacade.getAllModel(pageable);
+    @PreAuthorize("hasAuthority('read')")
+    Page<ProjectionModel> getAllModel(Pageable pageable, @RequestParam(defaultValue = "") String model) {
+        return vehiclesFacade.getAllModel(pageable,model);
     }
 
 
@@ -43,7 +44,7 @@ public class ModelControllerV1 {
     @PostMapping("/properties")
     @PreAuthorize("hasAuthority('write')")
     ResponseEntity<?> addModelProperty(@RequestBody ModelPropertyDto propertyDto, @RequestParam String property) {
-        return ResponseEntity.created(vehiclesFacade.addProperty(propertyDto,property)).build();
+        return ResponseEntity.created(vehiclesFacade.addProperty(propertyDto, property)).build();
     }
 
     private Supplier<ResponseEntity<Object>> getConflictResponse() {

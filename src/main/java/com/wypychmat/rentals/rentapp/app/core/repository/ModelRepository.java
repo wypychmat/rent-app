@@ -14,8 +14,8 @@ public interface ModelRepository extends JpaRepository<Model, Long> {
     @Query("SELECT m.id as id,  mf.manufacturer as manufacturer,  m.model as model, " +
             "m.startProductionYear as startProductionYear,  m.description as description, t.type as type, " +
             "s.segment as segment FROM Model m LEFT JOIN Manufacturer mf on mf.id = m.manufacturer.id LEFT JOIN Type t on " +
-            "m.type.id = t.id LEFT JOIN Segment s on m.segment.id = s.id")
-    Page<ProjectionModel> findAllModels(Pageable pageable);
+            "m.type.id = t.id LEFT JOIN Segment s on m.segment.id = s.id WHERE m.model LIKE %:modelName%")
+    Page<ProjectionModel> findAllModels(Pageable pageable, String modelName);
 
 
 }

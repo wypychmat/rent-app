@@ -23,8 +23,8 @@ public class VehiclesFacade {
         this.manufacturerService = manufacturerService;
     }
 
-   public Page<ProjectionModel>  getAllModel(Pageable pageable) {
-        return modelService.getAllModel(pageable);
+   public Page<ProjectionModel>  getAllModel(Pageable pageable, String model) {
+        return modelService.getAllModel(pageable, model);
     }
 
     public Optional<URI> addModel(ModelDto modelDto) {
