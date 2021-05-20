@@ -4,8 +4,15 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Type {
+@NamedQueries({
+        @NamedQuery(name = "Type.getAllContains", query = Type.SELECT_ALL
+                + "WHERE t.type LIKE concat('%', :valueName, '%')"),
 
+        @NamedQuery(name = "Type.getById", query = Type.SELECT_ALL
+                + "WHERE t.id = :selectedId")
+})
+public class Type {
+    static final String SELECT_ALL = "SELECT t.id as id, t.type as name FROM Type t ";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

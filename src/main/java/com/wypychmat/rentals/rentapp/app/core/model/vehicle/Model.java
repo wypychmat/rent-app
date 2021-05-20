@@ -8,8 +8,19 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Model.findAll",query = Model.ALL_MODELS + "WHERE m.model LIKE CONCAT('%', :modelName, '%')"
+        ),
+        @NamedQuery(name = "Model.findAllByManufacturerId",query = Model.ALL_MODELS + "WHERE mf.id = :producerId"
+        ),
+        @NamedQuery(name = "Model.findByModelId",query = Model.ALL_MODELS + "WHERE m.id = :modelId"
+        )
+})
 public class Model {
-
+    static final String ALL_MODELS = "SELECT m.id as id,  mf.manufacturer as manufacturer,  m.model as model, " +
+            "m.startProductionYear as startProductionYear,  m.description as description, t.type as type, " +
+            "s.segment as segment FROM Model m LEFT JOIN Manufacturer mf on mf.id = m.manufacturer.id LEFT JOIN Type t on " +
+            "m.type.id = t.id LEFT JOIN Segment s on m.segment.id = s.id ";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,16 +1,16 @@
 package com.wypychmat.rentals.rentapp.app.core.dto.vehicle;
 
-public class ManufacturerDto {
+public class BaseManufacturerDto {
 
-    private String manufacturer;
-    private String countryCode;
+    protected String manufacturer;
+    protected String countryCode;
 
 
     public String getManufacturer() {
         return manufacturer;
     }
 
-    public ManufacturerDto setManufacturer(String manufacturer) {
+    public BaseManufacturerDto setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
         return this;
     }
@@ -19,7 +19,7 @@ public class ManufacturerDto {
         return countryCode;
     }
 
-    public ManufacturerDto setCountryCode(String countryCode) {
+    public BaseManufacturerDto setCountryCode(String countryCode) {
         this.countryCode = countryCode;
         return this;
     }
