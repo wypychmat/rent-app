@@ -44,6 +44,7 @@ api:
     models: models
     producer: producers
     engines: engines
+    vehicles: vehicles
   param:
     register:
       token: token

@@ -7,10 +7,8 @@ import javax.validation.constraints.NotBlank;
 @NamedQueries({
         @NamedQuery(name = "Segment.getAllContains", query = Segment.SELECT_ALL
                 + "WHERE s.segment LIKE concat('%', :valueName, '%')"),
-
         @NamedQuery(name = "Segment.getById", query = Segment.SELECT_ALL
-                + "WHERE s.id = :selectedId")
-})
+                + "WHERE s.id = :selectedId")})
 public class Segment {
     static final String SELECT_ALL = "SELECT s.id as id, s.segment as name FROM Segment s ";
 
