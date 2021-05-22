@@ -1,7 +1,5 @@
 package com.wypychmat.rentals.rentapp.app.core.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.HttpStatus;
 
 import java.util.Date;

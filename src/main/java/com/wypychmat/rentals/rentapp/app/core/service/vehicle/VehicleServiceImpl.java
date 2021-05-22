@@ -1,5 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.service.vehicle;
 
+import com.wypychmat.rentals.rentapp.app.core.model.projection.BaseVehicleProjection;
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.VehicleDto;
 import com.wypychmat.rentals.rentapp.app.core.mapper.NewVehicleMapper;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.VehicleProjection;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 // TODO: 21.05.2021 add Verification
@@ -47,5 +49,11 @@ public class VehicleServiceImpl implements VehicleService {
                 .findAny()
                 .orElseThrow();
         vehicleRepository.save(newVehicleMapper.toVehicle(vehicleDto, model, engine));
+    }
+
+    @Override
+    // TODO: 22.05.2021 add verification
+    public Optional<BaseVehicleProjection> getVehicleBaseInformationByPlate(String registrationPlate) {
+        return vehicleRepository.getByRegistrationPlate(registrationPlate);
     }
 }

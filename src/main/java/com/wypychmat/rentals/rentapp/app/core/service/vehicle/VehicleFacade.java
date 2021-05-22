@@ -1,12 +1,15 @@
 package com.wypychmat.rentals.rentapp.app.core.service.vehicle;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.VehicleDto;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.BaseVehicleProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.VehicleProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.vehicle.RentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class VehicleFacade {
@@ -29,5 +32,9 @@ public class VehicleFacade {
 
     public void addVehicle(VehicleDto vehicleDto) {
         vehicleService.addVehicle(vehicleDto);
+    }
+
+    public Optional<BaseVehicleProjection> getVehicleByRegistrationPlate(String registrationPlate) {
+        return vehicleService.getVehicleBaseInformationByPlate(registrationPlate);
     }
 }

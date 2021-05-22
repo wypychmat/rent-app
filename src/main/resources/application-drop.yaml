@@ -35,3 +35,6 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     database: mysql
+
+jwt:
+  expiration-in-min: 200000

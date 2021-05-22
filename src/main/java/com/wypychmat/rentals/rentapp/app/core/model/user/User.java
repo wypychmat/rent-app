@@ -1,5 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.model.user;
 
+import com.wypychmat.rentals.rentapp.app.core.model.vehicle.BookHistory;
+import com.wypychmat.rentals.rentapp.app.core.model.vehicle.RentHistory;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -52,7 +55,13 @@ public class User {
     private Set<Role> userRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<RegisterToken> registerTokens;
+    private List<RegisterToken> registerTokens = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final Set<BookHistory> bookHistories = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final Set<RentHistory> rentHistories = new HashSet<>();
 
     public User() {
     }
@@ -154,6 +163,24 @@ public class User {
 
     public List<RegisterToken> getRegisterTokens() {
         return registerTokens;
+    }
+
+    public Set<BookHistory> getBookHistories() {
+        return bookHistories;
+    }
+
+    public void addBookHistory(List<BookHistory> bookHistories) {
+        bookHistories.forEach(x->x.setUser(this));
+        this.bookHistories.addAll(bookHistories);
+    }
+
+    public Set<RentHistory> getRentHistories() {
+        return rentHistories;
+    }
+
+    public void addRentHistories(List<RentHistory> rentHistories) {
+        rentHistories.forEach(x->x.setUser(this));
+        this.rentHistories.addAll(rentHistories);
     }
 
     @Override
