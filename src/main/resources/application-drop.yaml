@@ -1,0 +1,37 @@
+spring:
+  flyway.locations: classpath:db/migration/mysql
+  mail:
+    password: ${DEV_EMAIL_PASS}
+    username: ${DEV_EMAIL_USER}
+    host: ${DEV_EMAIL_HOST:smtp.gmail.com}
+    port: ${DEV_EMAIL_PORT:587}
+    protocol: ${DEV_EMAIL_PROTOCOL:smtp}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: jdbc:mysql://${MYSQL_DEV_HOST:localhost}:${MYSQL_DEV_PORT:3306}/${MYSQL_DEV_DATABASE}?useSSL=false&serverTimezone=UTC
+    username: ${MYSQL_DEV_USER}
+    password: ${MYSQL_DEV_PASS}
+    tomcat:
+      initial-size: 5
+    initialization-mode: always
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: auto
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database: mysql
