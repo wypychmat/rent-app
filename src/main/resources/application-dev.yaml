@@ -18,7 +18,7 @@ spring:
     password: ${MYSQL_DEV_PASS}
     tomcat:
       initial-size: 5
-#    initialization-mode: never
+    initialization-mode: never
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -32,6 +32,6 @@ spring:
         format_sql: true
 
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
     database: mysql
