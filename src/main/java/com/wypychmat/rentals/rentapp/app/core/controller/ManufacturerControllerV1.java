@@ -31,7 +31,8 @@ public class ManufacturerControllerV1 {
 
     @GetMapping
     @PreAuthorize("hasAuthority('read')")
-    public Page<ManufacturerProjection> getAllManufacturer(Pageable pageable, @RequestParam(defaultValue = "") String producer) {
+    public Page<ManufacturerProjection> getAllManufacturer(Pageable pageable, @RequestParam(defaultValue = "")
+            String producer) {
         return manufacturerFacade.getAllManufacturer(pageable, producer);
     }
 
