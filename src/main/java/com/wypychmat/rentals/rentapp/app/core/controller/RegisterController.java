@@ -17,11 +17,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "${api.base}" + "${api.path.register.base}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
-public class RegisterControllerV1 {
+public class RegisterController {
     private final RegistrationService registrationService;
     private final RegistrationMessageProvider messageProvider;
 
-    public RegisterControllerV1(RegistrationService registrationService, MessageSource messageSource) {
+    public RegisterController(RegistrationService registrationService, MessageSource messageSource) {
         this.registrationService = registrationService;
         this.messageProvider = new RegistrationMessageProvider(messageSource);
     }

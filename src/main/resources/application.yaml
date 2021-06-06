@@ -19,6 +19,11 @@ jwt:
   expiration-in-min: 90
   contentType: application/json
   authorities: authorities
+  username: username
+
+rent:
+  book:
+    expiresAfter: 14
 
 mail:
   message:
@@ -45,6 +50,8 @@ api:
     producer: producers
     engines: engines
     vehicles: vehicles
+    rent: rent
+    manage: manage
   param:
     register:
       token: token

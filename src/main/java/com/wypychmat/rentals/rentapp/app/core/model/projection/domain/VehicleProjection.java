@@ -1,6 +1,6 @@
-package com.wypychmat.rentals.rentapp.app.core.model.projection;
+package com.wypychmat.rentals.rentapp.app.core.model.projection.domain;
 
-import com.wypychmat.rentals.rentapp.app.core.model.vehicle.RentStatus;
+import com.wypychmat.rentals.rentapp.app.core.model.rent.RentStatus;
 
 public interface VehicleProjection {
     Long getId();

@@ -1,8 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.mail;
 
 import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
-import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationMessagePayload;
-import org.springframework.context.annotation.Profile;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationMessagePayload;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.controller;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.user.UserDto;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.service.user.UsersManipulationService;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import com.wypychmat.rentals.rentapp.app.core.util.page.PageParam;
@@ -15,10 +15,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "${api.base}" + "${api.path.users}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
-public class UserControllerV1 {
+public class UserController {
     private final UsersManipulationService usersManipulationService;
 
-    public UserControllerV1(UsersManipulationService usersManipulationService) {
+    public UserController(UsersManipulationService usersManipulationService) {
         this.usersManipulationService = usersManipulationService;
     }
 

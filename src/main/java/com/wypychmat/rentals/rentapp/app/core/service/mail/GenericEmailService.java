@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.mail;
 
 import com.wypychmat.rentals.rentapp.app.core.security.LoginRegisterPath;
-import com.wypychmat.rentals.rentapp.app.core.service.user.RegistrationMessagePayload;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationMessagePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;

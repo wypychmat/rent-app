@@ -24,9 +24,9 @@ class DropUnregisteredService {
     void drop() {
         List<User> users = registerTokenRepository.getNotFullyRegisteredUser(new Date().getTime());
         deleteNotFullyRegistered(users);
+
     }
 
-    @Transactional
     void deleteNotFullyRegistered(List<User> userIds) {
         if (userIds.size() > 0) {
             userRepository.deleteAll(userIds);

@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.vehicle;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.BaseManufacturerDto;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ManufacturerProjection;
+import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ManufacturerDto;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ManufacturerProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ public class ManufacturerFacade {
         this.manufacturerService = manufacturerService;
     }
 
-    public Optional<URI> addManufacture(BaseManufacturerDto baseManufacturerDto) {
-        return manufacturerService.addManufacturer(baseManufacturerDto);
+    public Optional<URI> addManufacture(ManufacturerDto manufacturerDto) {
+        return manufacturerService.addManufacturer(manufacturerDto);
     }
 
     public Page<ManufacturerProjection> getAllManufacturer(Pageable pageable, String producer) {

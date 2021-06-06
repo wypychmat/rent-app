@@ -13,7 +13,7 @@ import java.util.Locale;
 // TODO: 27.03.2021 add messages form properties
 
 @Service
-@Profile("dev")
+@Profile({"dev","drop"})
 class RegistrationServiceDev extends RegistrationServiceBase {
 
     @Autowired

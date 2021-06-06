@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Profile({"dev", "test"})
+@Profile({"dev", "test","drop"})
 class DevTestUserService implements UserService {
 
     private final UserRepository userRepository;
@@ -31,7 +31,7 @@ class DevTestUserService implements UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Set<SimpleGrantedAuthority> authorities = grantedAuthorityMapper(user.getUserRoles());
-            UserDetailsModel userDetails = new UserDetailsModel(user.getUsername(),
+            UserDetailsModel userDetails = new UserDetailsModel(user.getId(), user.getUsername(),
                     user.getPassword(),
                     authorities,
                     user.isEnabled());

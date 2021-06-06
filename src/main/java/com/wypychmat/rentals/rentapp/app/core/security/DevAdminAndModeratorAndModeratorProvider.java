@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("dev")
+@Profile({"dev", "drop"})
 class DevAdminAndModeratorAndModeratorProvider extends AdminAndModeratorProvider {
 
     @Autowired

@@ -2,8 +2,8 @@ package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.user.UserDto;
 import com.wypychmat.rentals.rentapp.app.core.mapper.UserMapper;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserProjection;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UserProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UserWithRoles;
 import com.wypychmat.rentals.rentapp.app.core.repository.UserRepository;
 import com.wypychmat.rentals.rentapp.app.core.service.pagable.PageableConverter;
 import com.wypychmat.rentals.rentapp.app.core.util.page.user.PageParamUsernameEmailEnabled;

@@ -9,8 +9,17 @@ class JwtConfig {
     private String prefix;
     private String contentType;
     private String authorities;
+    private String username;
 
     private JwtConfig() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getExpirationInMin() {

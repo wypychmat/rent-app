@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserProjection;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UserWithRoles;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UserProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UserWithRoles;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +20,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
+
+    User getUserById(Long id);
 
     @Query(name = "User.existByUsername")
     boolean existByUsername(@Param("username") String username);

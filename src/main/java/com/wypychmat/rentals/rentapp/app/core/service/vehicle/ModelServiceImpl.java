@@ -4,17 +4,18 @@ import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelDto;
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelPropertyDto;
 import com.wypychmat.rentals.rentapp.app.core.exception.vehicle.NoSuchModelMembersException;
 import com.wypychmat.rentals.rentapp.app.core.mapper.NewModelMapper;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModel;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModelProperty;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ProjectionModel;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ProjectionModelProperty;
 import com.wypychmat.rentals.rentapp.app.core.model.vehicle.*;
 import com.wypychmat.rentals.rentapp.app.core.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
+
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -22,11 +23,13 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static com.wypychmat.rentals.rentapp.app.core.util.Constant.DEFAULT_VARIABLE_PATH;
+
 @Service
 // TODO: 19.05.2021 add verification service
 class ModelServiceImpl implements ModelService {
 
-    public static final String DEFAULT_VARIABLE_PATH = "/{id}";
+
     private final ModelRepository modelRepository;
     private final SegmentRepository segmentRepository;
     private final EngineRepository engineRepository;
