@@ -1,8 +1,8 @@
-package com.wypychmat.rentals.rentapp.app.core.dto.rent;
+package com.wypychmat.rentals.rentapp.app.core.model.projection.domain;
 
 import java.util.Date;
 
-public interface ManageRentDto {
+public interface ManageRentProjection {
 
 
     Long getRentId();

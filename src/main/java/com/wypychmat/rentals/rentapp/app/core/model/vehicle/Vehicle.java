@@ -1,5 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.model.vehicle;
 
+import com.wypychmat.rentals.rentapp.app.core.model.rent.RentStatus;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +25,7 @@ public class Vehicle {
     @NotNull
     private RentStatus status;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @JoinColumn(name = "model_id", referencedColumnName = "id")
     private Model model;
 
@@ -32,6 +34,10 @@ public class Vehicle {
     private Engine engine;
 
     public Vehicle() {
+    }
+
+    public Vehicle(Long id) {
+        this.id = id;
     }
 
     public Vehicle(Integer productionYear, String registrationPlate, RentStatus status, Model model, Engine engine) {

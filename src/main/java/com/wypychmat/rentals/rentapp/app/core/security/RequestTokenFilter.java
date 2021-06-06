@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +48,7 @@ class RequestTokenFilter extends OncePerRequestFilter {
     private void attemptToAuthentication(HttpServletRequest request, String header) {
         try {
             DecodedJWT decodedJWT = extractAndDecodeTokenFromHeader(header);
-            authenticate(decodedJWT);
+            setSecurityContextHolder(decodedJWT);
         } catch (TokenExpiredException e) {
             request.setAttribute(CUSTOM_ERROR_MESSAGE, e.getMessage());
             e.printStackTrace();
@@ -66,13 +67,14 @@ class RequestTokenFilter extends OncePerRequestFilter {
         return verifier.verify(token);
     }
 
-    private void authenticate(DecodedJWT decodedJWT) {
-        setSecurityContextHolder(decodedJWT.getIssuer(),getAuthoritiesFromDecodedToken(decodedJWT));
-    }
-
-    private void setSecurityContextHolder(String issuer, Set<SimpleGrantedAuthority> authorities) {
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(issuer, null, authorities));
+    private void setSecurityContextHolder(DecodedJWT decodedJWT) {
+        String username = decodedJWT.getClaim(dependency.getJwtConfig().getUsername()).asString();
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        username,
+                null, getAuthoritiesFromDecodedToken(decodedJWT));
+        usernamePasswordAuthenticationToken.setDetails(decodedJWT.getSubject());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     private Set<SimpleGrantedAuthority> getAuthoritiesFromDecodedToken(DecodedJWT decodedJWT) {

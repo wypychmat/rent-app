@@ -1,6 +1,7 @@
-package com.wypychmat.rentals.rentapp.app.core.model.vehicle;
+package com.wypychmat.rentals.rentapp.app.core.model.rent;
 
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
+import com.wypychmat.rentals.rentapp.app.core.model.vehicle.Vehicle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ public class RentHistory {
     @JoinColumn(name = "vehicle_id",referencedColumnName = "id")
     private Vehicle vehicle;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 

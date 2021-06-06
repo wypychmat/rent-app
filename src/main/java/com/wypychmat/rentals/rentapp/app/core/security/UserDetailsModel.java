@@ -8,16 +8,26 @@ import java.util.Set;
 
 class UserDetailsModel implements UserDetails {
 
+    private final Long id;
     private final String username;
     private final String password;
     private final Set<? extends GrantedAuthority> grantedAuthorities;
     private final boolean isEnabled;
 
-    UserDetailsModel(String username, String password, Set<? extends GrantedAuthority> grantedAuthorities, boolean isEnabled) {
+
+
+
+
+    UserDetailsModel(Long id, String username, String password, Set<? extends GrantedAuthority> grantedAuthorities, boolean isEnabled) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
         this.isEnabled = isEnabled;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.wypychmat.rentals.rentapp.app.core.controller;
 
 
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ManufacturerDto;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ManufacturerProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ManufacturerProjection;
 import com.wypychmat.rentals.rentapp.app.core.service.vehicle.ManufacturerFacade;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "${api.base}" + "${api.path.producer}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
-public class ManufacturerControllerV1 {
+public class ManufacturerController {
     private final ManufacturerFacade manufacturerFacade;
 
-    public ManufacturerControllerV1(ManufacturerFacade manufacturerFacade) {
+    public ManufacturerController(ManufacturerFacade manufacturerFacade) {
         this.manufacturerFacade = manufacturerFacade;
     }
 

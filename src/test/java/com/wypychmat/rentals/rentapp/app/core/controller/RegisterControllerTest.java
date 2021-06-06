@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class RegisterControllerV1Test extends TestContainerBaseWithEmail {
+class RegisterControllerTest extends TestContainerBaseWithEmail {
 
     @Autowired
     private TestRestTemplate testRestTemplate;

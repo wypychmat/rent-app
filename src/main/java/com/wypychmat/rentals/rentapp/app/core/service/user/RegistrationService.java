@@ -1,6 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.service.user;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RefreshConfirmTokenRequest;
+import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationMessagePayload;
 import com.wypychmat.rentals.rentapp.app.core.mapper.RegistrationMapper;
 import com.wypychmat.rentals.rentapp.app.core.util.Constant;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationRequest;
@@ -8,7 +9,7 @@ import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationUserD
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidConfirmationTokenException;
 import com.wypychmat.rentals.rentapp.app.core.exception.register.InvalidUserRequestException;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.registration.RegistrationMessageProvider;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UsernameEmail;
 import com.wypychmat.rentals.rentapp.app.core.model.user.RegisterToken;
 import com.wypychmat.rentals.rentapp.app.core.model.user.User;
 import com.wypychmat.rentals.rentapp.app.core.service.mail.EmailService;

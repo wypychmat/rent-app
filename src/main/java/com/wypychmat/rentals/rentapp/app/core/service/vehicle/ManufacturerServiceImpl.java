@@ -1,8 +1,8 @@
 package com.wypychmat.rentals.rentapp.app.core.service.vehicle;
 
-import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.BaseManufacturerDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ManufacturerDto;
 import com.wypychmat.rentals.rentapp.app.core.mapper.NewManufacturerMapper;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ManufacturerProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ManufacturerProjection;
 import com.wypychmat.rentals.rentapp.app.core.model.vehicle.Manufacturer;
 import com.wypychmat.rentals.rentapp.app.core.repository.ManufacturerRepository;
 import org.springframework.data.domain.Page;
@@ -25,8 +25,8 @@ class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     @Override
-    public Optional<URI> addManufacturer(BaseManufacturerDto baseManufacturerDto) {
-        Manufacturer save = manufacturerRepository.save(manufacturerMapper.mapManufacturer(baseManufacturerDto));
+    public Optional<URI> addManufacturer(ManufacturerDto manufacturerDto) {
+        Manufacturer save = manufacturerRepository.save(manufacturerMapper.mapManufacturer(manufacturerDto));
         return Optional.of(getUri(save::getId, "/{id}"));
     }
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class BookRequest {
+public class BookingRequest {
 
     private Long vehicleId;
 

@@ -1,19 +1,21 @@
 package com.wypychmat.rentals.rentapp.app.core.repository;
 
 
-import com.wypychmat.rentals.rentapp.app.core.model.projection.BaseVehicleProjection;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.VehicleProjection;
-import com.wypychmat.rentals.rentapp.app.core.model.vehicle.RentStatus;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.BaseVehicleProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.VehicleProjection;
+import com.wypychmat.rentals.rentapp.app.core.model.rent.RentStatus;
 import com.wypychmat.rentals.rentapp.app.core.model.vehicle.Vehicle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
-
+@Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
 
@@ -28,4 +30,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     Optional<BaseVehicleProjection> getByRegistrationPlate(@NotBlank String registrationPlate);
 
 
+    @Modifying
+    @Query("UPDATE Vehicle v SET v.status= :newStatus WHERE v.id = :id")
+    void changeStatus(RentStatus newStatus, Long id);
 }

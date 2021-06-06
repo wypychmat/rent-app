@@ -4,7 +4,7 @@ import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationReque
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationResponse;
 import com.wypychmat.rentals.rentapp.app.core.dto.registration.RegistrationUserDto;
 import com.wypychmat.rentals.rentapp.app.core.internationalization.MessageProviderCenter;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.UsernameEmail;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.user.UsernameEmail;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 

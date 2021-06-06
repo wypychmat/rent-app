@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 // TODO: 13.04.2021 add message from properties
 class LoginService {
 
+    public static final String USERNAME = "username";
     private final LoginFilterDependency dependency;
     private final ObjectMapper objectMapper;
     private final ZoneId zoneId;
@@ -85,8 +86,10 @@ class LoginService {
     }
 
     private String getToken(Authentication auth, Date nowDate, Date expiresAt) {
-        return JWT.create().withIssuer(auth.getName())
+        return JWT.create()
                 .withClaim(dependency.getJwtConfig().getAuthorities(), getAuthorities(auth))
+                .withSubject(String.valueOf(((UserDetailsModel) auth.getPrincipal()).getId()))
+                .withClaim(dependency.getJwtConfig().getUsername(),auth.getName())
                 .withIssuedAt(nowDate)
                 .withExpiresAt(expiresAt)
                 .sign(dependency.getAlgorithm());

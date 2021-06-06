@@ -31,7 +31,7 @@ class DevTestUserService implements UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Set<SimpleGrantedAuthority> authorities = grantedAuthorityMapper(user.getUserRoles());
-            UserDetailsModel userDetails = new UserDetailsModel(user.getUsername(),
+            UserDetailsModel userDetails = new UserDetailsModel(user.getId(), user.getUsername(),
                     user.getPassword(),
                     authorities,
                     user.isEnabled());

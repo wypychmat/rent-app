@@ -37,4 +37,4 @@ spring:
     database: mysql
 
 jwt:
-  expiration-in-min: 200000
+  expiration-in-min: 20000

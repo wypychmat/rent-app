@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.model.rent;
+package com.wypychmat.rentals.rentapp.app.core.model.projection.domain;
 
 import java.util.Date;
 

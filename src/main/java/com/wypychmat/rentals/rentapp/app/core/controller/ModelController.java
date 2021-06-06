@@ -3,8 +3,8 @@ package com.wypychmat.rentals.rentapp.app.core.controller;
 
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelDto;
 import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ModelPropertyDto;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModel;
-import com.wypychmat.rentals.rentapp.app.core.model.projection.ProjectionModelProperty;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ProjectionModel;
+import com.wypychmat.rentals.rentapp.app.core.model.projection.domain.ProjectionModelProperty;
 import com.wypychmat.rentals.rentapp.app.core.service.vehicle.ModelFacade;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
 import org.springframework.data.domain.Page;
@@ -19,11 +19,11 @@ import java.util.function.Supplier;
 
 @RestController
 @RequestMapping(value = "${api.base}" + "${api.path.models}", produces = {ApiVersion.JSON, ApiVersion.V1_JSON})
-public class ModelControllerV1 {
+public class ModelController {
 
     private final ModelFacade modelFacade;
 
-    public ModelControllerV1(ModelFacade modelFacade) {
+    public ModelController(ModelFacade modelFacade) {
         this.modelFacade = modelFacade;
     }
 

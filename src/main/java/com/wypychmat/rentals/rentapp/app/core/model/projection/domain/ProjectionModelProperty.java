@@ -1,4 +1,4 @@
-package com.wypychmat.rentals.rentapp.app.core.model.projection;
+package com.wypychmat.rentals.rentapp.app.core.model.projection.domain;
 
 
 public interface ProjectionModelProperty {

@@ -1,6 +1,6 @@
 package com.wypychmat.rentals.rentapp.app.core.dto.rent;
 // todo add validation
-public class ConfirmRequest {
+public class ConfirmBookingRequest {
     private Long userId;
     private Long bookId;
     private Long odometer;

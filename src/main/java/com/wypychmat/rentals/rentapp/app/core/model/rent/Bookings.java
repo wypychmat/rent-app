@@ -9,13 +9,24 @@ import java.time.Instant;
 import java.time.Period;
 import java.util.Date;
 
+import static com.wypychmat.rentals.rentapp.app.core.model.rent.Bookings.ALL_QUERY;
+
 @Entity
-public class BookHistory {
+@NamedQueries({
+        @NamedQuery(name = "Bookings.getAllBookings",query = ALL_QUERY),
+        @NamedQuery(name = "Bookings.getByBookIdAndUserId",query = ALL_QUERY + " WHERE b.id =:bookId AND b.user.id=:userId")
+})
+public class Bookings {
+    static final String ALL_QUERY = "SELECT b.id as bookId, b.user.id as userId, v.id as vehicleId, b.bookDate as bookDate, b.startRentDate as startRentDate," +
+            " b.endRentDate as endRentDate, b.expiresDate as expiresDate, mf.manufacturer as manufacturer, " +
+            "m.model as model, v.registrationPlate as registrationPlate FROM Bookings b" +
+            "  LEFT JOIN b.vehicle v ON v.id = b.vehicle.id LEFT join v.model m " +
+            "ON v.model.id = m.id LEFT JOIN m.manufacturer mf ON m.manufacturer.id = mf.id";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @NotNull
     private User user;
@@ -37,22 +48,19 @@ public class BookHistory {
     @NotNull
     private Vehicle vehicle;
 
-    @Column(columnDefinition = "bit(1) default 0")
-    private boolean wasAccomplished;
 
-    public BookHistory() {
+    public Bookings() {
     }
 
-    public BookHistory(User user,
-                       Date startRentDate, Date endRentDate, Vehicle vehicle,
-                       int expireAfterDay) {
+    public Bookings(User user,
+                    Date startRentDate, Date endRentDate, Vehicle vehicle,
+                    int expireAfterDay) {
         this.startRentDate = startRentDate;
         this.endRentDate = endRentDate;
         Instant now = Instant.now();
         this.user = user;
         this.bookDate = Date.from(now);
         this.vehicle = vehicle;
-        this.wasAccomplished = false;
         vehicle.setStatus(RentStatus.BOOKED);
         expiresDate = Date.from(now.plus(Period.ofDays(expireAfterDay)));
     }
@@ -89,11 +97,4 @@ public class BookHistory {
         this.vehicle = vehicle;
     }
 
-    public boolean isWasAccomplished() {
-        return wasAccomplished;
-    }
-
-    public void setWasAccomplished(boolean wasAccomplished) {
-        this.wasAccomplished = wasAccomplished;
-    }
 }
