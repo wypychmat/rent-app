@@ -1,7 +1,7 @@
 package com.wypychmat.rentals.rentapp.app.core.controller;
 
 
-import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.BaseManufacturerDto;
+import com.wypychmat.rentals.rentapp.app.core.dto.vehicle.ManufacturerDto;
 import com.wypychmat.rentals.rentapp.app.core.model.projection.ManufacturerProjection;
 import com.wypychmat.rentals.rentapp.app.core.service.vehicle.ManufacturerFacade;
 import com.wypychmat.rentals.rentapp.app.core.util.ApiVersion;
@@ -23,8 +23,8 @@ public class ManufacturerControllerV1 {
 
     @PostMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> addNew(@RequestBody BaseManufacturerDto baseManufacturerDto) {
-        return manufacturerFacade.addManufacture(baseManufacturerDto)
+    public ResponseEntity<?> addNew(@RequestBody ManufacturerDto manufacturerDto) {
+        return manufacturerFacade.addManufacture(manufacturerDto)
                 .map(x -> ResponseEntity.created(x).build())
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
